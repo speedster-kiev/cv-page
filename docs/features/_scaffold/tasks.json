@@ -1,0 +1,20 @@
+{
+  "slug": "_scaffold",
+  "tasks": [
+    { "id": "S1", "title": "Create the Astro project structure and a baseline page", "layer": "scaffold", "deps": [],
+      "acs": [], "dod": "project builds: `npm run build` emits dist/index.html from a placeholder content file",
+      "files_hint": ["package.json", "astro.config.mjs", "tsconfig.json", ".nvmrc", "src/pages/", "src/components/", "src/content/", "src/lib/contact/", "src/styles/", "public/"] },
+    { "id": "S2", "title": "Wire the Vitest harness with a smoke test and a build-output test", "layer": "scaffold", "deps": ["S1"],
+      "acs": [], "dod": "`npm test` runs green; the smoke test confirms dist/index.html exists after build",
+      "files_hint": ["vitest.config.ts", "tests/"] },
+    { "id": "S3", "title": "Set up ESLint and the Astro type check", "layer": "scaffold", "deps": ["S1"],
+      "acs": [], "dod": "`npm run lint` passes on the baseline project",
+      "files_hint": ["eslint.config.js", "package.json"] },
+    { "id": "S4", "title": "Add the GitHub Actions workflow (build + test + lint, deploy to GitHub Pages)", "layer": "scaffold", "deps": ["S2", "S3"],
+      "acs": [], "dod": "workflow YAML is valid; its commands match build_cmd, test_cmd and lint_cmd in the architecture map; the deploy job targets GitHub Pages",
+      "files_hint": [".github/workflows/"] },
+    { "id": "S5", "title": "Write CLAUDE.md from the chosen conventions", "layer": "scaffold", "deps": ["S1"],
+      "acs": [], "dod": "CLAUDE.md reflects docs/architecture-map.md conventions, including the rule that raw email and phone never appear in dist/",
+      "files_hint": ["CLAUDE.md"] }
+  ]
+}
