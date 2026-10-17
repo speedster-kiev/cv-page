@@ -9,8 +9,8 @@ files_hint: ["src/content/load.ts", "tests/load.test.ts"]
 owner: "mkarazeev@gmail.com"
 estimate: "M"
 context_budget: "M"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T4 — Build the content loader: parse YAML, validate, scan, throw ContentError

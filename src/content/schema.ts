@@ -55,7 +55,7 @@ export const careerSchema = z.strictObject({
 
 export type Career = z.infer<typeof careerSchema>;
 
-type Path = (string | number)[];
+export type Path = (string | number)[];
 
 const getAt = (root: unknown, path: Path): unknown =>
   path.reduce<unknown>(
@@ -63,7 +63,7 @@ const getAt = (root: unknown, path: Path): unknown =>
     root,
   );
 
-const formatPath = (path: Path): string =>
+export const formatPath = (path: Path): string =>
   path.reduce<string>(
     (out, key) => (typeof key === 'number' ? `${out}[${key}]` : out ? `${out}.${key}` : key),
     '',
@@ -73,7 +73,7 @@ const joinLabel = (...parts: unknown[]): string =>
   parts.filter((p): p is string => typeof p === 'string' && p.trim() !== '').join(', ');
 
 // Names the Position or education entry an issue belongs to, so an index is never the only locator.
-const entryLabel = (raw: unknown, path: Path): string => {
+export const entryLabel = (raw: unknown, path: Path): string => {
   const [section, index] = path;
   if (typeof index !== 'number') return '';
   const entry = getAt(raw, [section, index]) as Record<string, unknown> | undefined;

@@ -76,7 +76,7 @@
         "tests/load.test.ts"
       ],
       "file": "docs/features/career-page/tasks/t4-content-loader.md",
-      "status": "todo"
+      "status": "done"
     },
     {
       "id": "T5",
