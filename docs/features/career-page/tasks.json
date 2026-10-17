@@ -33,7 +33,7 @@
         "tests/detect.test.ts"
       ],
       "file": "docs/features/career-page/tasks/t2-contact-detector.md",
-      "status": "todo"
+      "status": "done"
     },
     {
       "id": "T3",

@@ -9,8 +9,8 @@ files_hint: ["src/lib/contact/detect.ts", "tests/detect.test.ts"]
 owner: "mkarazeev@gmail.com"
 estimate: "S"
 context_budget: "S"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T2 — Implement the contact-shape detector with table-driven unit tests
