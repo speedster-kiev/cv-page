@@ -110,7 +110,7 @@ C4Context
 4. **Plain text in, escaped text out** — components print values only as escaped `{value}`; `set:html` is banned by a new lint rule this feature adds to `eslint.config.js` (`astro/no-set-html-directive`; `tasks` must include it), so markup in content is shown as text, never executed (spec §6.1). Empty Career sections are omitted entirely (AC-06).
 5. **Photo processed at build time** — an optional `photo` entry (file under `src/content/`, currently `photo.jpg`, 600×600, 53 KB, required `alt`) is resized and re-encoded by Astro's image pipeline (`sharp`) into a small, explicit-size image. Re-encoding drops source metadata (EXIF), so the delivered file carries no location or contact data (AC-13 "any other delivered file"). Inline decision, no ADR: the choice is reversible in hours and lives in one component.
 
-Assumptions taken (easy depth, accepted by the Owner on 2026-10-17): English (`<html lang="en">`), the five Career sections, plain text only, dates to the month (`YYYY-MM` strings) displayed as "Mar 2021 – Present" from a fixed English month table (no `Intl`); Positions order: ongoing first, then newest start first, ties keep the Owner's order.
+Assumptions taken (easy depth, accepted by the Owner on 2026-10-17): English (`<html lang="en">`), the five Career sections, plain text only, dates to the year (`YYYY` strings, Owner decision 2026-10-17) displayed as "2021 – Present"; Positions order: ongoing first, then newest start first, ties keep the Owner's order.
 
 ## 5. Building block view
 
@@ -234,7 +234,7 @@ ADR files live under `docs/features/career-page/adr/NNNN-<title>.md`. Foundation
 ## 10. Quality requirements
 
 **QG-1. Content integrity**
-- **When:** the Content file is invalid (missing name, headline, employer, title or start month; a Position ending before it starts) or any text contains something shaped like an email or phone number.
+- **When:** the Content file is invalid (missing name, headline, employer, title or start year; a Position ending before it starts) or any text contains something shaped like an email or phone number.
 - **Then:** the build fails, produces no output, and 100% of validation failures name the offending entry and what is wrong (spec §6: "Failure message quality"); content check plus build time ≤ 60 s.
 - **How verify:** Vitest unit tests of the schema and detector for each AC-08/08b/09/12 case, asserting the message names the path; one test runs the build against an invalid fixture (via `CV_CONTENT_FILE`) into a separate output directory, so it never touches the `dist/` that the global setup builds for the other tests, and asserts non-zero exit and no `index.html` there; build job duration in CI.
 
@@ -284,4 +284,4 @@ ADR files live under `docs/features/career-page/adr/NNNN-<title>.md`. Foundation
 | Visitor | a person (HR, recruiter, hiring manager, professional contact) reading the page |
 | ContentError | the single build-time error that lists every content problem with its path |
 | Contact shape | text that looks like an email address or a phone number, whether or not it is the Owner's own |
-| Ongoing Position | a Position with a start month and no end; displayed as "Mar 2021 – Present" and listed first |
+| Ongoing Position | a Position with a start year and no end; displayed as "2021 – Present" and listed first |

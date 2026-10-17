@@ -34,7 +34,7 @@ The Owner changes what the page says by editing only the Content file (US-05), a
 
 ## Decision outcome
 
-**Chosen:** Option 1. It gives the Owner comments and readable multi-line text and gives the loader line/column for syntax errors, at the cost of one explicit dependency (`yaml`, already present through Astro). Months are stored as `YYYY-MM` strings and the schema rejects non-string values, which avoids YAML's implicit typing of dates and `yes`/`no`.
+**Chosen:** Option 1. It gives the Owner comments and readable multi-line text and gives the loader line/column for syntax errors, at the cost of one explicit dependency (`yaml`, already present through Astro). Years are stored as `YYYY` strings and the schema rejects non-string values, which avoids YAML's implicit typing of dates and `yes`/`no`.
 
 ## Consequences
 

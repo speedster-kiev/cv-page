@@ -1,0 +1,237 @@
+# Career content for the page (SAD ADR 0001). Plain text only.
+# Exported from cv.md. Dates are years (YYYY).
+
+name: Maksym Karazieiev
+headline: Engineering Manager
+photo:
+  file: photo.jpg
+  alt: Portrait of Maksym Karazieiev
+
+summary: |-
+  Engineering Manager with 20+ years in software, from engineer and lead engineer to leading distributed product teams in regulated enterprise environments. Most recently at Ayvens, responsible for two teams across Denmark and offshore through the ALD Automotive and LeasePlan merger, under NIS2 and banking-licence controls. I have worked with and led mixed teams where developers and testers came from outstaffing partners in Romania, Vietnam, Bulgaria and India, working inside my teams rather than alongside them, and worked with stakeholders across four Nordic countries at Ayvens, and in the UK and Denmark earlier in my career. I believe teams deliver their best when the system around them is clear.
+
+  I lead from within the team. My engineering background lets me engage directly in architecture and production issues, and weigh technical choices against business value and risk. I adapt my leadership to where each person is, and treat growing engineers, hiring well and building a culture of ownership as core parts of the role.
+
+  My focus is predictable delivery: clear priorities, visible dependencies, and requirements tested against real needs before they are built. In practice that has meant consolidating customer-facing platforms across the merger with no P1 incidents, reducing an offshore team's cycle time from ~48 to 16 days, and passing every audit under banking-licence controls.
+
+positions:
+  - employer: Ayvens A/S (formerly ALD Automotive)
+    employer_about: >-
+      Formed through the acquisition and merger of ALD Automotive and LeasePlan — two of the world's largest fleet management companies — creating a global mobility leader managing ~3.3 million vehicles worldwide and serving enterprise clients such as LEGO, STARK, and NCC.
+    title: Engineering Manager
+    start: "2024"
+    end: "2026"
+    summary: |-
+      Led two product teams (10 engineers across Denmark and an offshore outstaffing partner in India) within the Nordic IT Hub, working on enterprise mobility platforms, customer self-service solutions, and integrations with the Miles ERP system and across legacy and modern systems.
+
+      Responsible for people development, delivery reliability, technical direction, and hiring. Partnered closely with engineers on system design, integrations, and production issues.
+    achievements:
+      - >-
+        Improved delivery predictability across two distributed teams by introducing clearer prioritization, strengthening collaboration with business stakeholders, and addressing dependency bottlenecks, achieving ~80% on-time delivery
+      - >-
+        Led IT landscape integration across the ALD Automotive and LeasePlan merger — responsible for merging the customer-facing self-service applications used by drivers, fleet managers, and partners; coordinated cross-team dependencies and aligned stakeholders across two global organisations, consolidating systems into a unified architecture under the new Ayvens brand with no P1 incidents recorded
+      - >-
+        Challenged a requested search-result field-configuration feature that the team had estimated at 6-8 weeks and two other teams' involvement: went to the business for actual usage data, found a handful of customers wanted different defaults but none needed to change them on an ongoing basis, and shipped a per-customer JSON config with a standard default instead, meeting every customer's need and avoiding the build entirely
+      - >-
+        Built an internal tool automating compliance reporting, delegating the implementation to coding agents and reviewing the generated code for correctness and maintainability
+      - >-
+        Designed the security and scaling model for a public-facing vehicle pickup request feature: single-use, hashed URLs emailed only to the customer, rate limiting and CAPTCHA against automated abuse, and a scheduled job pre-computing valid vehicle records so any hash not matching a real, in-window record was rejected outright — decoupled from the Miles ERP system via a queue built on the platform team's infrastructure so the public form's load could never reach it directly
+      - >-
+        Built a Microsoft Teams bot (Node.js, Terraform) giving the development team visibility into what was actually deployed to production, closing a gap where changes went live without the team's knowledge — a gap that had caused friction with the business, especially when production issues couldn't be traced or verified in time
+      - >-
+        Acted as sparring partner for the Product Owner on UX, prototyping, design tools, usability testing and customer journey optimization
+      - >-
+        Built a psychologically safe team environment through coaching, knowledge sharing, and structured collaboration, increasing ownership and engineering quality
+      - >-
+        Mentored a developer from junior to senior level
+      - >-
+        Worked closely with the test team to ensure quality across teams
+      - >-
+        Ensured security, GDPR and compliance governance aligned with NIS2 framework and internal banking-licence controls, including internal reporting and audit processes — the team passed every audit (Ayvens holds a banking licence in multiple Nordic jurisdictions)
+      - >-
+        Drove grass-roots AI adoption in the team through hands-on workshops, and kicked off early-stage investigation into AI-assisted code reviews and automated E2E test generation (CoPilot + Playwright)
+
+  - employer: Ayvens A/S (formerly ALD Automotive)
+    title: IT Process Lead
+    start: "2022"
+    end: "2024"
+    summary: >-
+      Responsible for designing and implementing operational processes and collaboration frameworks across the Nordic IT Hub, improving alignment and delivery effectiveness across multiple teams.
+    achievements:
+      - >-
+        Filled an unassigned delivery lead role for a Miles ERP database migration (3 Nordic countries to central hosting in France): identified stakeholders and upstream/downstream dependencies, created risk mitigation and communication plans, ran alignment meetings with teams and partners, and followed up through execution; delivered on target date with no major disruptions and full system stabilisation within one week; recognised by direct managers, CIO, and CTO at a company-wide town hall as an example of good ownership and delivery
+      - >-
+        Revitalized an underperforming offshore team staffed through an outstaffing partner by introducing structured prioritization, coaching, and bottleneck visibility, reducing cycle time from ~48 to 16 days and improving predictability
+      - >-
+        Introduced team-owned KPIs (DORA-inspired) and embedded them into governance processes, improving transparency and alignment across teams and leadership
+      - >-
+        Built and rolled out a full-lifecycle development process across three teams, aligning workflows from ideation to production deployment
+
+  - employer: TV2 Danmark A/S
+    employer_about: >-
+      Denmark's leading public-service broadcaster and digital media company, operating nationwide TV channels and digital platforms reaching millions of users daily.
+    title: Platform Product Owner – Free Platform (CMS & Editorial)
+    start: "2020"
+    end: "2022"
+    summary: >-
+      End-to-end platform ownership of TV2's enterprise CMS platform used daily by hundreds of journalists across the organisation. Responsible for platform strategy, roadmap, and outcomes across multiple dependent teams. Operated under a "you build it, you run it" DevOps model — the team owned delivery, operations, and production reliability.
+    achievements:
+      - >-
+        Owned the enterprise CMS platform lifecycle from strategy to architecture redesign — mapped tool lifecycles, evaluated multi-instance CMS architecture, drove standardisation and reuse across teams, and aligned roadmap with business and technical stakeholders
+      - >-
+        Led strategic migration from a Drupal-based CMS to a custom-built, cloud-native platform, rebuilding the architecture to scale elastically with news-traffic demand spikes (replacing the previous fixed-capacity model) to support hundreds of daily active editorial users
+      - >-
+        Delivered new editorial workflow platform for tv2.dk front page, coordinating cross-functional teams and improving editorial satisfaction and workflow reliability
+      - >-
+        Initiated AWS cloud migration by aligning stakeholders and delivering initial services
+
+  - employer: TV2 Danmark A/S
+    title: Product Owner – tv2.dk
+    start: "2018"
+    end: "2020"
+    summary: >-
+      Owned product direction and backlog for Denmark's leading news platform, reaching 1M+ daily unique users, balancing user experience, business goals, and technical constraints.
+    achievements:
+      - >-
+        Delivered large-scale election platform for the Danish general election (Folketingsvalg) by coordinating five internal teams and external partners (including KMD as election-data provider), handling ~1.5M concurrent users and ensuring stable performance during peak traffic
+      - >-
+        Led incident response to a data-format mismatch flagged by journalists during live election results reporting: disabled the affected public widgets, coordinated with the external data partner (KMD) on a fix, and validated before re-enabling
+      - >-
+        Standardized stakeholder input requirements for major event deliveries with a scope/deliverables/data-spec template and checklist, reducing ambiguity and delivery risk
+      - >-
+        Built a repeatable delivery process for major live events (elections, Tour de France, Vuelta, World Cup) through structured retrospectives and lessons-learned documentation after each delivery
+      - >-
+        Led delivery of Candidate Test (7.5M page views, 1.8M completions), managing cross-functional collaboration across product, editorial, and engineering
+      - >-
+        Navigated business–tech trade-offs in Prebid implementation, optimizing revenue while maintaining platform performance and stability
+
+  - employer: TV2 Danmark A/S
+    title: Technical Project Manager
+    start: "2016"
+    end: "2018"
+    summary: >-
+      Led planning and execution of cross-functional technical projects, aligning business goals with engineering delivery.
+    achievements:
+      - >-
+        Delivered migration of ~900,000 articles across 7 channels by coordinating multiple teams, ensuring no business disruption; the legacy content was structured but effectively unworkable, so the structure was remodelled during import rather than carried over as-is
+      - >-
+        Led transition to a new publishing platform serving 150+ users, aligning technical direction with editorial workflows and long-term needs
+      - >-
+        Introduced development practices (Kanban, code reviews, metrics), improving delivery speed and reducing production defects
+
+  - employer: Vacasol (Sunnyrentals.com)
+    employer_about: >-
+      Vacation rental company managing ~35,000 properties and partnering with platforms such as Hotels.com and Booking.com.
+    title: Lead Software Engineer
+    start: "2013"
+    end: "2016"
+    summary: >-
+      Responsible for technical quality and development team (6 engineers), working on platform performance, reliability, and development practices.
+    achievements:
+      - >-
+        Mentored and coached a junior developer to senior level within two years, improving team capability and knowledge sharing
+      - >-
+        Eliminated a recurring nightly outage caused by a statistics-calculation job taking the whole site down: noticed the correlation between the job's usual start time and the site going unresponsive, added logging to the job to confirm it, then fixed it through targeted performance improvements and refactoring
+      - >-
+        Introduced agile practices, CI/CD pipelines, and code quality standards, improving delivery predictability and software quality
+      - >-
+        Reduced platform load time from 10 seconds to 2.8 seconds: isolated the cause by stripping elements from the front page one at a time until large, synchronously loaded images surfaced as the bottleneck, then fixed the loading strategy and architecture
+      - >-
+        Improved platform security and release processes by implementing HTTPS and structured deployment pipelines
+      - >-
+        Developed systems on AWS with the team, working hands-on with Docker containers to give onshore and offshore developers a consistent development environment
+
+  - employer: Berlingske Media
+    title: Scrum Master / Software Engineer
+    start: "2011"
+    end: "2013"
+
+  - employer: Racing Post
+    title: Software Engineer, Team Lead, Scrum Master
+    start: "2008"
+    end: "2011"
+    summary: >-
+      Led a team of 5 engineers while working hands-on as a developer.
+    achievements:
+      - >-
+        Built a custom CMS from scratch, designed for extensibility, under a constraint that ruled out existing off-the-shelf frameworks; the extensibility model cut the delivery time of a subsequent rebranding project in half
+      - >-
+        Led, mentored, and coached a team of 5 engineers
+
+# Page-level key achievements (AC-04). The CV has no such list; the three below repeat
+# the outcomes of its Summary. Edit or delete.
+achievements:
+  - Consolidated customer-facing platforms across the ALD Automotive and LeasePlan merger with no P1 incidents
+  - Reduced an offshore team's cycle time from ~48 to 16 days
+  - Passed every audit under banking-licence controls
+
+# Flattened from the three CV skill groups (Leadership & Organization, Technical, Product & Delivery).
+skills:
+  - People management (1:1s, coaching, performance reviews)
+  - Hiring (role definition, interviews, final decisions)
+  - Cross-functional leadership
+  - Stakeholder management
+  - Organizational process design
+  - Stakeholders across four Nordic countries and the UK
+  - Leading mixed internal and outstaffed teams (Romania, Vietnam, Bulgaria, India)
+  - "Multi-supplier delivery: onboarding, ways of working and knowledge transfer across supplier changes"
+  - Distributed systems & microservices
+  - SQL
+  - Domain-Driven Design (DDD)
+  - Cloud platforms (AWS, Azure)
+  - API design (REST, data contracts)
+  - APIs, webhooks and integrations
+  - Event-driven architecture
+  - SaaS products
+  - Infrastructure as code (Terraform)
+  - CI/CD pipelines
+  - Observability and reliability engineering
+  - Product development lifecycle
+  - Backlog ownership and prioritization
+  - Self-service solutions
+  - UX, prototyping, usability testing and customer journey optimization (sparring partner for the Product Owner at Ayvens)
+  - Agile
+  - "Scaled agile: SAFe-inspired ways of working at TV2, hands-on in PI Planning (SAFe 4 Agilist certified)"
+  - Capacity and resource planning in hours and headcount
+  - Dependency, risk management and flow optimization
+  - "Quality across teams in close collaboration with test/QA: testers embedded in my teams in every role except Vacasol; close collaboration with the test team at Ayvens"
+
+education:
+  - institution: National Aviation University
+    degree: Master's Degree in Computer Science
+    start: "2004"
+    end: "2005"
+  - institution: National Aviation University
+    degree: Bachelor's Degree in Computer Science
+    start: "2000"
+    end: "2004"
+  # Certifications & Development from the CV; the year is in the degree text because
+  # the schema's period is a start/end range.
+  - institution: Center for Ledelse
+    degree: Team Leadership (2025)
+  - institution: Center for Ledelse
+    degree: Manager's Toolbox (2024)
+  - institution: Center for Ledelse
+    degree: Personal Impact (2023)
+  - institution: Scrum.org
+    degree: Professional Agile Leadership (2021)
+  - institution: Scaled Agile
+    degree: SAFe 4 Agilist (2019)
+  - institution: Peoplecert
+    degree: ITIL® Foundation Certificate in IT Service Management (2016)
+  - institution: ScrumAlliance
+    degree: Certified ScrumMaster (2011)
+
+# Not exported: the five-section schema has no place for these CV sections.
+# Decide whether to add a sixth section or drop them.
+#
+# Languages: English (fluent), Danish (fluent), Ukrainian (native)
+# Technologies: Node.js, PHP (hands-on, personal coding); C#/.NET, React, Angular (recent teams' stack —
+#   architecture and code review, jumping in on critical issues, not day-to-day personal implementation);
+#   MySQL; Docker, Kubernetes; AWS (Vacasol, TV2), Azure, Azure DevOps; Jira, Confluence; Terraform; Figma;
+#   Google Analytics (Ayvens, Vacasol), Matomo (Ayvens), Adobe Analytics (TV2); Miles ERP (Ayvens)
+# Volunteering: Active volunteer ready helper (parathjælper), Danish Red Cross Parat (Røde Kors Parat):
+#   practical help for people in acute or vulnerable situations who have no one else to turn to
+# Compliance & Security: GDPR and security compliance (TV2, Ayvens); NIS2 framework;
+#   Banking-licence regulatory controls (Ayvens); Internal controls and audit reporting
+# References: Available on request (former leaders and colleagues)
