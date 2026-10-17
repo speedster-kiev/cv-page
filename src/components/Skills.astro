@@ -1,0 +1,15 @@
+---
+import Section from './Section.astro';
+
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+---
+
+<Section title="Skills" count={items.length}>
+  <ul>
+    {items.map((item) => <li>{item}</li>)}
+  </ul>
+</Section>

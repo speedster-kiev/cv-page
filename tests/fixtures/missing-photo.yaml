@@ -1,0 +1,25 @@
+name: Jane Doe
+photo:
+  file: nope.jpg
+  alt: Portrait of Jane
+headline: Engineering Manager
+summary: A short summary.
+positions:
+  - employer: Acme
+    title: Engineer
+    start: "2020"
+    end: "2022"
+    achievements:
+      - Shipped it
+  - employer: Globex
+    title: Lead
+    start: "2022"
+    achievements:
+      - Led it
+achievements:
+  - Won an award
+skills:
+  - Testing
+education:
+  - institution: Uni
+    degree: BSc

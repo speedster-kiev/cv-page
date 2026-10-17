@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { Career } from '../content/schema';
+import { paragraphs } from '../lib/paragraphs';
+
+interface Props {
+  name: Career['name'];
+  headline: Career['headline'];
+  summary?: Career['summary'];
+  photo?: Career['photo'];
+}
+
+const { name, headline, summary, photo } = Astro.props;
+
+// Keep the extensions in step with `photoFile` in content/schema.ts.
+const images = import.meta.glob<{ default: ImageMetadata }>('../content/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+});
+
+// The photo is re-encoded by the image pipeline (sharp), which drops source metadata such as EXIF.
+// The loader reports a missing file with the other content problems; this is the backstop.
+const source = photo ? images[`../content/${photo.file}`]?.default : undefined;
+if (photo && !source) throw new Error(`photo.file — ${photo.file} not found in src/content/`);
+
+---
+
+<header class="profile">
+  {
+    photo && source && (
+      <Image
+        class="profile-photo"
+        src={source}
+        alt={photo.alt}
+        width={160}
+        height={160}
+        densities={[1, 2]}
+        format="webp"
+        loading="eager"
+        fetchpriority="high"
+      />
+    )
+  }
+  <div class="profile-text">
+    <h1>{name}</h1>
+    <p class="headline">{headline}</p>
+    {paragraphs(summary).map((paragraph) => <p>{paragraph}</p>)}
+  </div>
+</header>

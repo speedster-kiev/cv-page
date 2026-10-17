@@ -1,0 +1,290 @@
+---
+status: Draft
+owner: "mkarazeev@gmail.com"
+reviewers: ["Tech Lead", "Security Lead"]
+updated_at: "2026-10-17"
+feature_size: "S"
+---
+
+# Spec — career-page
+
+> **Glossary:** [CONTEXT](./CONTEXT.md)
+> **Reference module / docs / channels used:** project docs only — `docs/idea-brief.md` (§2, §3, §5, §6, §7, §8), `docs/roadmap.md` (step 2 "Career page"), `docs/architecture-map.md`, `docs/adr/0001`–`0004`.
+
+## 1. Context
+
+The Owner is pursuing Engineering Manager roles and wants one public page that presents their professional life and achievements, so that Visitors can get to know them (idea brief §2–§3). HR and recruiters are owner-reported Visitors; hiring managers and professional contacts are an assumption recorded in the brief. This spec covers the part of the page that presents Career content — roadmap step 2, "Career page". The contact section, search and AI-agent metadata, and going live are separate roadmap steps (3, 4 and 5) with their own specifications.
+
+No trigger or deadline is established (idea brief §4). This step comes next because the contact section and the search metadata both depend on the page and its content existing first (roadmap dependency graph).
+
+The committed approach: the home page presents the Owner's Career content as a sequence of Career sections that are produced entirely from the Content file, which is checked before anything is published, so that invalid content stops a release instead of producing a partial or broken page. All Career content is plain page text that a Machine reader can read without running scripts. This direction was accepted by the Owner in the idea brief (§7); the Owner set size S and route quick for this run. Ideation analyses were skipped because the brief already records the accepted direction and the one alternative considered (relying on the Owner's LinkedIn profile alone).
+
+Traceability and limits: the Owner has not yet supplied the Content file (idea brief §8), so the list of Career sections and the content language below are assumptions recorded in §8 and awaiting the Owner's confirmation. The Owner's required constraint that the raw email address and phone number never appear in the published page (idea brief §5) is carried into this spec as a rule on Career content.
+
+## 2. Goals
+
+- A Visitor understands who the Owner is and what they have achieved from this single page, reading top to bottom without leaving it.
+- The Owner changes what the page says by editing only the Content file.
+- Only valid Career content is ever published, and when content is invalid the Owner is told exactly what to fix.
+- Machine readers get every piece of Career content as plain page text.
+
+## 3. Non-goals
+
+- The contact section (booking link, professional-network link, click-to-reveal email and phone) — it is roadmap step 3, which owns the click-to-reveal mechanism and its encoding; this step only guarantees that Career content never contains raw email or phone (AC-12, AC-13).
+- Search and AI-agent metadata (structured data, sitemap, robots rules, page metadata) — roadmap step 4, which derives it from the content once the content exists.
+- Putting the page on the public internet and linking it from the Owner's CV and profile — roadmap step 5. In this step "publishing stops" means the build fails and produces no output when content is invalid (AC-08 to AC-10, AC-12); connecting that check to the deploy is step 5.
+- Formatted text or links inside Career content — content is plain text only.
+- Several languages, theme switching or animation — none was requested by the Owner. (The Owner's photo is Career content and is in scope, see US-01 and AC-01.)
+
+## 4. User stories
+
+### US-01: See who the Owner is
+
+**As a** Visitor
+**I want** the Owner's name, photo, headline and short summary at the top of the page
+**So that** I immediately know whose career I am reading about and what role they are after
+
+### US-02: Follow the career history
+
+**As a** Visitor
+**I want** the Owner's Positions listed with employer, title, period and achievements
+**So that** I can judge the Owner's experience and progression
+
+### US-03: Scan key achievements
+
+**As a** Visitor
+**I want** a list of the Owner's most notable achievements in one place (no fixed maximum; the Owner decides how many)
+**So that** I get the highlights without reading every Position
+
+### US-04: See skills and education
+
+**As a** Visitor
+**I want** the Owner's skills and education shown
+**So that** I can check them against what my open role requires
+
+### US-05: Update the page by editing content
+
+**As an** Owner
+**I want** to change what the page says by editing only the Content file
+**So that** keeping my career story current needs no change to the page layout
+
+### US-06: Be stopped from publishing broken content
+
+**As an** Owner
+**I want** invalid Career content to stop publishing and tell me what to fix
+**So that** Visitors never see a partial or broken page
+
+### US-07: Read all career content as text
+
+**As a** Machine reader
+**I want** every item of Career content present as readable page text
+**So that** I can index or summarise the Owner's career without running scripts
+
+### US-08: Keep contact details out of career text
+
+**As an** Owner
+**I want** the page to refuse to publish my raw email address or phone number inside career text
+**So that** a slip in my own wording cannot expose them to scraping bots
+
+## 5. Acceptance criteria
+
+### AC-01 (US-01) — happy path
+
+**Given** the Content file holds the Owner's name, photo (with its alt text), headline and summary
+**When** a Visitor opens the page
+**Then** the Visitor sees the name, photo, headline and summary first, before any other Career section
+
+### AC-02 (US-02) — happy path
+
+**Given** the Content file lists three Positions with different periods
+**When** a Visitor opens the page
+**Then** the Visitor sees the Positions newest first by start year, each with its employer, title, period and achievements, and also its employer description and summary when given; Positions with the same start year keep the order the Owner gave
+
+### AC-03 (US-02) — happy path, current Position
+
+**Given** a Position in the Content file has a start but no end
+**When** a Visitor opens the page
+**Then** the Visitor sees that Position's period shown as ongoing (for example "2021 – Present"), and it appears first among the Positions; if several Positions are ongoing they are ordered newest start first, and those with the same start year keep the order the Owner gave
+
+### AC-04 (US-03) — happy path
+
+**Given** the Content file lists notable achievements
+**When** a Visitor opens the page
+**Then** the Visitor sees them together in one achievements section, in the order the Owner gave
+
+### AC-05 (US-04) — happy path
+
+**Given** the Content file lists skills and education entries
+**When** a Visitor opens the page
+**Then** the Visitor sees a skills section (a flat list in the order the Owner gave) and an education section (each entry with institution and degree, and a period when given, in the order the Owner gave)
+
+### AC-06 (US-04) — domain invariant, no empty sections
+
+**Given** the Content file has no entries for one Career section, such as education
+**When** a Visitor opens the page
+**Then** that section is not shown at all, with no empty heading and no placeholder text
+
+### AC-07 (US-05) — happy path
+
+**Given** the Owner changes one Position's title in the Content file and nothing else
+**When** the Owner publishes
+**Then** Visitors see the new title and all other visible content of the page is unchanged
+
+### AC-08 (US-06) — error, required item missing
+
+**Given** the Content file has no name
+**When** the Owner tries to publish
+**Then** publishing stops and the Owner is told that the name is required and where in the Content file it belongs
+
+### AC-08b (US-06) — error, other required items missing
+
+**Given** the Content file has no headline, or a Position without an employer, a title, a start year or at least one achievement, or an education entry without an institution or a degree, or a photo without alt text; the summary, skills and education sections, and a Position's end year, employer description and summary, are optional
+**When** the Owner tries to publish
+**Then** publishing stops and the Owner is told which item is missing, naming the Position when the item belongs to one
+
+### AC-09 (US-06) — domain invariant, period order
+
+**Given** a Position or an education entry in the Content file ends in an earlier year than it starts (ending in the same year it starts is allowed)
+**When** the Owner tries to publish
+**Then** publishing stops and the Owner is told that a period cannot end before it starts, naming the Position or education entry
+
+### AC-10 (US-06) — cross-context, nothing published on failure
+
+**Given** the Owner's new Content file is invalid
+**When** the Owner tries to publish it
+**Then** publishing stops and nothing new is published, so Visitors never see a partial or broken page
+
+### AC-11 (US-07) — happy path
+
+**Given** the page is published
+**When** a Machine reader reads it without running scripts
+**Then** every item of Career content from the Content file is present as readable text, in the same order a Visitor sees it; dates may be shown in the display format a Visitor sees (such as "2021 – Present"), all other text is present as written
+
+### AC-12 (US-08) — error, contact detail in career text
+
+**Given** any Career content text — name, headline, summary, photo alt text, achievements, a Position's text (including its employer description and summary), skills or education — contains something shaped like an email address or a phone number (any such value, not only the Owner's own)
+**When** the Owner tries to publish
+**Then** publishing stops and the Owner is told which entry contains the contact detail and that contact details are shared only through the contact section
+
+### AC-13 (US-08) — domain invariant, raw contact details never shown
+
+**Given** the page is published
+**When** any Visitor or Machine reader reads the page in any form — visible text, links, attributes, metadata or any other delivered file
+**Then** no raw email address and no raw phone number of the Owner appear anywhere in it
+
+### AC-14 (US-05) — authorization, only the Owner changes content
+
+**Given** the page is live
+**When** a Visitor or a Machine reader tries to change what the page says
+**Then** they cannot, because only the Owner, by editing the Content file in the repository, can change it; readers only read
+
+## 6. Non-functional requirements
+
+| Aspect | Target | Measurement |
+|---|---|---|
+| Load speed, mobile | Largest Contentful Paint ≤ 2.5 s on a simulated mid-range phone over a 4G connection, empty cache | Lighthouse mobile run on the built page (gate inherited by roadmap step 5, go live) |
+| Lighthouse performance score, mobile | ≥ 90 | same Lighthouse run |
+| Accessibility | Lighthouse accessibility score ≥ 95 and text contrast ratio ≥ 4.5:1 | same Lighthouse run |
+| Delivered page weight | ≤ 100 KB uncompressed for HTML and CSS combined (the photo, fonts and scripts are not counted; the contact reveal script is step 3's budget) | build-output test that sums the built HTML and CSS files |
+| Works without scripts | 100% of Content-file text (including photo alt text) present in the delivered page text, comparing values after display formatting (dates only) | build-output test that compares the Content file against the built page |
+| Small screens | no horizontal scrolling at a 320 px viewport width | manual check (gate inherited by roadmap step 5, go live) |
+| Failure message quality | 100% of validation failures name the offending entry and what is wrong | automated tests of the content checks |
+| Content check plus build time | ≤ 60 s | duration of the build job in CI |
+| Browser support | latest 2 versions of Chrome, Safari, Firefox and Edge | manual smoke check (gate inherited by roadmap step 5, go live) |
+
+## 6.1 Security / privacy
+
+- **Data classification:** public — the Career content is what the Owner chooses to publish. The Owner's raw email address and phone number are confidential and must never appear in the delivered page.
+- **Personal data touched:** the Owner's own name and employment history, published by the Owner's choice. No Visitor data is collected — no accounts, forms, cookies or tracking in this step.
+- **AuthZ/AuthN impact:** none — the page is public and read-only for everyone; the only way to change it is the Owner's own editing of the Content file in the repository.
+- **Abuse cases:**
+  - Contact details typed into career text by mistake: publishing stops and names the entry (AC-12).
+  - Markup or script text inside Career content: Career content is plain text only (no formatting or links); markup is shown to Visitors as plain text, never executed.
+  - Scraping of the page: accepted, since the Career content is public by design; the raw email and phone are the only protected items (AC-13).
+  - Someone else changing the content: out of scope here — controlled by who can change the repository.
+- **Security review:** N/A — a public, read-only page with no accounts and no Visitor data; its one sensitive rule (no raw email or phone) is covered by AC-12 and AC-13 and verified by automated tests.
+
+## 7. Metrics / KPIs
+
+- **Content coverage** — share of Content-file entries visible on the page: baseline 0% (placeholder page), target 100% at first publish.
+- **Invalid content reaching Visitors** — baseline 0, target 0 incidents, ever; measurement: publishing is gated on the content check passing (AC-10); the live-site gate is inherited by roadmap step 5.
+- **Page quality scores** — Lighthouse performance and accessibility: baseline TBD, measured on the current placeholder page at the start of implementation; target ≥ 90 and ≥ 95 at first publish.
+- **Layout edits needed for content changes** — baseline n/a, target 0 over the first 3 months after go-live; measurement: every content-only change touches only the Content file.
+
+## 8. Open questions
+
+- [ ] Which Career sections does the Owner want beyond the assumed set (profile, positions, achievements, skills, education)? Default now: English, the five assumed sections, plain text only, dates to the year, required items as in AC-08/AC-08b. The Content file is `src/content/career.yaml` only; `src/content/content.json` is removed; unknown keys in it fail the build. — owner: Owner, due: before `sdd:design`
+- [ ] What are the photo's size budget (file weight) and its effect on the mobile Lighthouse targets in §6? Default now: no separate budget; the §6 Lighthouse targets apply with the photo included. — owner: Tech Lead, due: before `sdd:design`
+- [x] `career.yaml` has a Position (Berlingske Media) with no achievements, which AC-08b now rejects. Default now: Owner adds at least one achievement before first publish. — owner: Owner, due: before implement
+- [ ] How are contact details detected in career text without wrongly rejecting ordinary numbers such as years, team sizes and money amounts? Default now: reject anything shaped like an email address, and anything shaped like a phone number with at least 7 digits in a row (spaces, dashes and brackets allowed), except year ranges such as "2019–2023" and amounts grouped with spaces such as "1 000 000", which must not be rejected. The absence check compares against these shapes, since the Owner's real values belong to roadmap step 3. — owner: Tech Lead, due: before `sdd:design`
+- [ ] How will the Owner measure the brief's outcome "a visitor books a call or contacts the owner", given there is no backend (ADR 0002)? Default now: not measured. — owner: Owner, due: before roadmap step 5 (go live)
+
+## Test plan
+
+The page is built from the Content file into static files; invalid content must stop the build with a named error. There is no datastore (ADR 0002), so the "real dependency" for integration tests is the real build run on throwaway fixture Content files.
+
+### Levels
+
+| Level | Scope here |
+|---|---|
+| unit | Content checks (required items, period order, contact-shape detection), period formatting, Position ordering — pure functions, no I/O. |
+| component | Each Career section rendered in isolation for the states in `screens.md` SCR-01 (default, no-photo, section-omitted, position-ongoing, position-optional-parts, education-period-optional). |
+| integration | The real build run against a fixture Content file in a temporary directory; assertions read the built output files. |
+| e2e-through-UI | One smoke flow: the built page opened as a Visitor sees it, read top to bottom with scripts disabled. |
+| visual-regression | N/A: not chosen for this feature. |
+| contract / load | <!-- N/A: no API or event boundary; no numeric load NFR --> |
+
+### AC coverage
+
+| AC (spec.md §5) | Test name (intent-based) | Level | Expected outcome |
+|---|---|---|---|
+| AC-01 happy path | profile block comes first with name, photo, alt text, headline, summary | component + integration | profile is the first Career section in the built page |
+| AC-01 variant | profile without a photo shows no empty image | component | no image element, rest of profile intact |
+| AC-02 happy path | positions are listed newest start year first with all parts | unit + component + integration | order by start year; employer, title, period, achievements shown; optional description and summary shown when given |
+| AC-02 tie | positions with the same start year keep the Owner's order | unit | given order preserved |
+| AC-03 happy path | ongoing position shows "Present" and sorts first | unit + component | period reads "2021 – Present", listed before ended positions |
+| AC-03 ties | several ongoing positions order newest start first, ties keep given order | unit | ordering as stated |
+| AC-04 happy path | notable achievements appear together in the Owner's order | component + integration | one achievements section, given order |
+| AC-05 happy path | skills list and education entries render in the Owner's order | component + integration | skills flat list; education with institution, degree, optional period |
+| AC-06 invariant | section with no entries is not rendered at all | component + integration | no heading, no placeholder, no gap |
+| AC-07 happy path | changing one title changes only that title in the built page | integration | the built page differs from the baseline build only in that title |
+| AC-08 error | missing name stops the build and names the field | unit + integration | build fails, message says name is required and where it belongs, no output produced |
+| AC-08b error | each missing required item stops the build and names it | unit + integration | one case per item: headline, employer, title, start year, achievements, education institution, education degree, photo alt text; message names the Position when it belongs to one |
+| AC-08b optional | omitting optional items does not fail the build | unit | summary, skills, education, end year, employer description, position summary may all be absent |
+| AC-09 invariant | period ending before it starts is rejected | unit + integration | build fails naming the Position or education entry |
+| AC-09 boundary | period ending in the same year it starts is accepted | unit | accepted |
+| AC-10 cross-context | failed content check leaves no new output | integration | build fails and no built page exists from that run |
+| AC-11 happy path | every Content-file text is present in the built text in the same order | integration + e2e-through-UI | all values present as written (dates after display formatting), same order, with scripts disabled |
+| AC-12 error | email-shaped text in any career field stops the build and names the entry | unit + integration | one case per field kind (name, headline, summary, alt text, achievement, position text incl. description and summary, skill, education); message names the entry and says contact details go through the contact section |
+| AC-12 error | phone-shaped text of 7 or more digits stops the build and names the entry | unit + integration | rejected, entry named |
+| AC-13 invariant | no raw email or phone appears in any built file | integration | scan of every file in the built output (text, links, attributes, metadata, other files) finds no email or phone shape |
+| AC-14 authorization | built page offers no way to change content | integration | built output has no form, no input and no script that sends data; content changes only via the Content file |
+
+### Edge cases / error paths
+
+- Year range such as "2019–2023" in text → expected: not treated as a phone number, build passes.
+- Amount grouped with spaces such as "1 000 000" → expected: not treated as a phone number, build passes.
+- Number with fewer than 7 digits in a row (team size, year) → expected: accepted.
+- Phone with spaces, dashes or brackets and 7 or more digits → expected: rejected, entry named.
+- Unknown key in the Content file → expected: build fails naming the key.
+- Content file missing or not parseable → expected: build fails with a clear message, no output.
+- Markup or script text inside a value → expected: appears as literal text in the built page, never as a tag.
+- Several validation failures at once → expected: all are listed, each naming its entry (failure message quality NFR).
+- Position with no achievements (current `career.yaml`, Berlingske Media; see §8) → expected: build fails until the Owner adds one.
+
+### Test data
+
+- Seed strategy: small fixture Content files written per test (a minimal valid one plus one-defect variants); the real `src/content/career.yaml` gets one smoke build.
+- Integration dependency: the real build run in a throwaway temporary directory; no mocked parser or renderer, no datastore exists.
+- Cleanup boundary: per-test temporary directory removed after each test, so runs are independent.
+
+### NFR validation (load)
+
+<!-- N/A: no numeric NFR to load-test. -->
+
+Numeric NFRs are covered as gates, not load scenarios: delivered HTML + CSS weight ≤ 100 KB and 100% text presence (build-output tests, integration); content check plus build ≤ 60 s (CI job duration); audit scores, contrast, 320 px width and browser support are manual or inherited by roadmap step 5.
+
+### CI placement
+
+- On every PR: unit, component, and the integration build-output tests.
+- Pre-release / go-live (roadmap step 5): e2e-through-UI smoke flow and the inherited manual gates.

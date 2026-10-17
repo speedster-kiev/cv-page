@@ -1,6 +1,14 @@
 ---
-import content from '../content/content.json';
+import Achievements from '../components/Achievements.astro';
+import Education from '../components/Education.astro';
+import Positions from '../components/Positions.astro';
+import Profile from '../components/Profile.astro';
+import Skills from '../components/Skills.astro';
+import { loadCareer } from '../content/load';
 import '../styles/global.css';
+
+// A ContentError is deliberately not caught: invalid content must fail the build (AC-10).
+const career = loadCareer();
 ---
 
 <!doctype html>
@@ -8,12 +16,15 @@ import '../styles/global.css';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>{content.name}</title>
+    <title>{career.name}</title>
   </head>
   <body>
     <main>
-      <h1>{content.name}</h1>
-      <p>{content.headline}</p>
+      <Profile name={career.name} headline={career.headline} summary={career.summary} photo={career.photo} />
+      <Positions positions={career.positions} />
+      <Achievements items={career.achievements} />
+      <Skills items={career.skills} />
+      <Education entries={career.education} />
     </main>
   </body>
 </html>

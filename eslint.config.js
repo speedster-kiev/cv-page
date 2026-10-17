@@ -8,5 +8,6 @@ export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...astro.configs.recommended,
+  { rules: { 'astro/no-set-html-directive': 'error' } },
   { languageOptions: { globals: { ...globals.node, ...globals.browser } } },
 ];
