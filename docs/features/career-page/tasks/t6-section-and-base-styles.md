@@ -9,8 +9,8 @@ files_hint: ["src/components/Section.astro", "src/styles/global.css"]
 owner: "mkarazeev@gmail.com"
 estimate: "S"
 context_budget: "S"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T6 — Add the Section component and base page styles
