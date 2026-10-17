@@ -57,7 +57,11 @@ const expectedInOrder = (): string[] => [
   ]),
   ...(career.achievements ?? []).map(squash),
   ...(career.skills ?? []).map(squash),
-  ...(career.education ?? []).flatMap((e) => [e.degree, e.institution]),
+  ...(career.education ?? []).flatMap((e) => [
+    e.degree,
+    e.institution,
+    ...(e.start || e.end ? [e.start && e.end ? period(e.start, e.end) : (e.start ?? e.end)!] : []),
+  ]),
 ];
 
 describe('built page content (AC-11)', () => {
