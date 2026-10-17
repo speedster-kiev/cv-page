@@ -9,8 +9,8 @@ files_hint: ["src/pages/index.astro", "src/content/content.json", "astro.config.
 owner: "mkarazeev@gmail.com"
 estimate: "M"
 context_budget: "M"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T11 — Compose index.astro from the loader and components; remove the placeholder

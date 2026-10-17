@@ -215,7 +215,7 @@
         "tests/smoke.test.ts"
       ],
       "file": "docs/features/career-page/tasks/t11-compose-index-page.md",
-      "status": "todo"
+      "status": "done"
     },
     {
       "id": "T12",
