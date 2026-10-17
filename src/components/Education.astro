@@ -1,0 +1,24 @@
+---
+import type { PresentedCareer } from '../content/load';
+import Section from './Section.astro';
+
+interface Props {
+  entries: PresentedCareer['education'];
+}
+
+const { entries } = Astro.props;
+---
+
+<Section title="Education" count={entries.length}>
+  {
+    entries.map((entry) => (
+      <article class="education-entry">
+        <h3>{entry.degree}</h3>
+        <p>
+          {entry.institution}
+          {entry.period && <> · {entry.period}</>}
+        </p>
+      </article>
+    ))
+  }
+</Section>

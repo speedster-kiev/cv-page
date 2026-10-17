@@ -189,7 +189,7 @@
         "src/components/Education.astro"
       ],
       "file": "docs/features/career-page/tasks/t10-education-component.md",
-      "status": "todo"
+      "status": "done"
     },
     {
       "id": "T11",

@@ -9,8 +9,8 @@ files_hint: ["src/components/Education.astro"]
 owner: "mkarazeev@gmail.com"
 estimate: "S"
 context_budget: "S"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T10 — Build the Education component with optional period
