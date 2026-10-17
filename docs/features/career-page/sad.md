@@ -104,11 +104,11 @@ C4Context
 
 **Top strategic choices (the seeds for ADRs):**
 
-1. **Single YAML Content file validated by a typed schema** — one `src/content/career.yaml` is the only file the Owner edits for what the page says (US-05); the photo is an optional Career content item inside it (`photo` with `file` and `alt`), and the image itself sits in `src/assets/`. A Zod schema checks shape, required items and period order, and reports every problem with its path. YAML gives comments, plain multi-line text and line/column on syntax errors, which AC-08 needs ("where in the Content file"). → feature ADR 0001.
+1. **Single YAML Content file validated by a typed schema** — one `src/content/career.yaml` is the only file the Owner edits for what the page says (US-05); the photo is an optional Career content item inside it (`photo` with `file` and `alt`), and the image itself sits next to it as `src/content/photo.jpg`. A Zod schema checks shape, required items and period order, and reports every problem with its path. YAML gives comments, plain multi-line text and line/column on syntax errors, which AC-08 needs ("where in the Content file"). → feature ADR 0001.
 2. **Fail the build, not the page** — validation runs when the page module loads at build time and throws one `ContentError` listing every problem. `astro build` exits non-zero and writes no `dist/index.html`, and the deploy job in step 5 depends on that success. This delivers AC-10 and the invariant "invalid content is never published, not even partially".
 3. **Reject contact-shaped text by pattern** — every text value (including the photo `alt`) is scanned for email and phone shapes at build time, and a hit fails the build (AC-12). The same shapes drive the `dist/` absence test (AC-13). → feature ADR 0002.
 4. **Plain text in, escaped text out** — components print values only as escaped `{value}`; `set:html` is banned by a new lint rule this feature adds to `eslint.config.js` (`astro/no-set-html-directive`; `tasks` must include it), so markup in content is shown as text, never executed (spec §6.1). Empty Career sections are omitted entirely (AC-06).
-5. **Photo processed at build time** — an optional `photo` entry (file under `src/assets/`, required `alt`) is resized and re-encoded by Astro's image pipeline (`sharp`) into a small, explicit-size image. Re-encoding drops source metadata (EXIF), so the delivered file carries no location or contact data (AC-13 "any other delivered file"). Inline decision, no ADR: the choice is reversible in hours and lives in one component.
+5. **Photo processed at build time** — an optional `photo` entry (file under `src/content/`, currently `photo.jpg`, 600×600, 53 KB, required `alt`) is resized and re-encoded by Astro's image pipeline (`sharp`) into a small, explicit-size image. Re-encoding drops source metadata (EXIF), so the delivered file carries no location or contact data (AC-13 "any other delivered file"). Inline decision, no ADR: the choice is reversible in hours and lives in one component.
 
 Assumptions taken (easy depth, accepted by the Owner on 2026-10-17): English (`<html lang="en">`), the five Career sections, plain text only, dates to the month (`YYYY-MM` strings) displayed as "Mar 2021 – Present" from a fixed English month table (no `Intl`); Positions order: ongoing first, then newest start first, ties keep the Owner's order.
 
@@ -121,10 +121,10 @@ The page is a single deployable with a layered, build-time pipeline: the data mo
 ```
 src/
 ├── content/
+│   ├── photo.jpg          the Owner profile photo (optional; re-encoded at build, source EXIF dropped)
 │   ├── career.yaml        the Content file (the only file the Owner edits for text)
 │   ├── schema.ts          Zod schema, types, required items, period-order rule
 │   └── load.ts            read file, parse YAML, validate, scan, sort; throws ContentError
-├── assets/photo.*         the Owner's photo (optional)
 ├── lib/contact/
 │   └── detect.ts          email / phone shape detection + exemptions (no raw values)
 ├── components/            Section, Profile, Positions, Achievements, Skills, Education
