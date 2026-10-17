@@ -38,6 +38,8 @@ describe('invalid content stops the build and names the entry', () => {
     ['AC-08b', 'no-headline', 'no headline', [/headline — required/]],
     ['AC-08b', 'position-missing-employer', 'a Position without an employer', [/positions\[0\]\.employer — required/, /Position "Engineer"/]],
     ['AC-09', 'end-before-start', 'a period ending before it starts', [/cannot end before it starts/, /Position "Acme, Engineer"/]],
+    ['AC-08b', 'missing-photo', 'a photo file that does not exist', [/ContentError/, /photo\.file — nope\.jpg not found/]],
+    ['AC-08b', 'non-image-photo', 'a photo file that is not a supported image', [/ContentError/, /photo\.file — .*jpg, jpeg, png or webp/]],
     ['AC-12', 'contact-in-summary', 'an email in the summary', [/summary — contains a contact detail/, /contact section/]],
   ];
 

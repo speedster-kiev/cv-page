@@ -1,5 +1,5 @@
-import { existsSync, readFileSync } from 'node:fs';
-import { basename, join } from 'node:path';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { basename } from 'node:path';
 import { parseDocument } from 'yaml';
 import { hasContactShape } from '../lib/contact/detect';
 import { entryLabel, formatPath, validateCareer, type Career, type Path } from './schema';
@@ -99,6 +99,6 @@ export function loadCareer(path: string = process.env.CV_CONTENT_FILE ?? DEFAULT
   const label = basename(path);
   if (!existsSync(path)) throw new ContentError([`${label}: file not found at ${path}`]);
   return parseCareer(readFileSync(path, 'utf8'), label, {
-    photoExists: (file) => existsSync(join(PHOTO_DIR, file)),
+    photoExists: (file) => readdirSync(PHOTO_DIR).includes(file),
   });
 }

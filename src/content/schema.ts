@@ -8,6 +8,11 @@ const text = z.string().trim().min(1);
 const year = z.string().regex(/^\d{4}$/);
 const textList = z.array(text).default([]);
 
+// The Profile component globs these extensions in src/content/; keep its pattern in step.
+const photoFile = text.regex(/^[^/\\]+\.(jpg|jpeg|png|webp)$/, {
+  message: 'must be a file name in src/content/ ending in jpg, jpeg, png or webp',
+});
+
 const orderedPeriod = (
   period: { start?: string; end?: string },
   ctx: z.core.$RefinementCtx,
@@ -45,7 +50,7 @@ const educationSchema = z
 export const careerSchema = z.strictObject({
   name: text,
   headline: text,
-  photo: z.strictObject({ file: text, alt: text }).optional(),
+  photo: z.strictObject({ file: photoFile, alt: text }).optional(),
   summary: text.optional(),
   positions: z.array(positionSchema).default([]),
   achievements: textList,
@@ -113,7 +118,11 @@ function describe(raw: unknown, issue: z.core.$ZodIssue): string[] {
           : `${where} — required${label}`,
       ];
     case 'invalid_format':
-      return [`${where} — must be a four-digit year, like "2021"${label}`];
+      return [
+        isYearField(path)
+          ? `${where} — must be a four-digit year, like "2021"${label}`
+          : `${where} — ${issue.message}${label}`,
+      ];
     default:
       return [`${where} — ${issue.message}${label}`];
   }

@@ -13,6 +13,7 @@ interface Props {
 
 const { name, headline, summary, photo } = Astro.props;
 
+// Keep the extensions in step with `photoFile` in content/schema.ts.
 const images = import.meta.glob<{ default: ImageMetadata }>('../content/*.{jpg,jpeg,png,webp}', {
   eager: true,
 });
