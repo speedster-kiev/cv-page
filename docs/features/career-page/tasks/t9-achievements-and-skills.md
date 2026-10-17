@@ -9,8 +9,8 @@ files_hint: ["src/components/Achievements.astro", "src/components/Skills.astro"]
 owner: "mkarazeev@gmail.com"
 estimate: "S"
 context_budget: "M"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T9 — Build the Achievements and Skills list components

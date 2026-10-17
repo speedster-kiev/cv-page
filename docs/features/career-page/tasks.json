@@ -171,7 +171,7 @@
         "src/components/Skills.astro"
       ],
       "file": "docs/features/career-page/tasks/t9-achievements-and-skills.md",
-      "status": "todo"
+      "status": "done"
     },
     {
       "id": "T10",
