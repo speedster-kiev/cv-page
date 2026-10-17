@@ -202,6 +202,76 @@ sequenceDiagram
     end
 ```
 
+**Critical flow 2: render Career sections from validated data (build time)**
+
+Covers US-01 to US-05; AC-01 to AC-07, AC-13. Runs inside flow 1's "content is valid" branch.
+
+```mermaid
+sequenceDiagram
+    participant service as service (page build)
+    participant store as data-store (validated data)
+    participant media as external-system (image pipeline)
+    Note over service,store: precondition: content passed all checks (flow 1)
+    service->>store: read profile, positions, achievements, skills, education
+    service->>service: sort positions, ongoing first, then newest start first, ties keep Owner order
+    service->>service: format periods to years, such as 2021 – Present
+    alt photo present
+        service->>media: resize and re-encode the photo
+        media-->>service: small image with no source metadata
+        service->>service: place photo with alt text and explicit size in the profile
+    else no photo
+        service->>service: render the profile without an image
+    end
+    loop each Career section
+        alt section has entries
+            service->>service: render heading and entries as escaped text
+        else section is empty
+            service->>service: omit the section, no heading, no placeholder
+        end
+    end
+    Note over service,store: writes static HTML, CSS and image files only, no persisted entity
+    Note over service: postcondition: profile first, text order equals Content file order, no raw contact value in any output file
+```
+
+**Critical flow 3: a Visitor or Machine reader opens the page**
+
+Covers US-01, US-07; AC-01, AC-11, AC-13, AC-14.
+
+```mermaid
+sequenceDiagram
+    actor user as user (Visitor or Machine reader)
+    participant ui as ui (static page)
+    participant host as external-system (page host)
+    Note over user,host: precondition: a valid build was deployed
+    user->>host: requests the page
+    host-->>ui: delivers static HTML, CSS and image
+    ui-->>user: profile first, then positions, achievements, skills, education
+    Note over ui,user: all Content-file text is present as page text, photo text as image alt, no script needed
+    alt reader tries to change content
+        user->>host: asks to change what the page says
+        host-->>user: read-only, nothing to change
+    end
+    Note over user,host: postcondition: nothing stored, no Visitor data collected
+```
+
+**Coverage check (use-case and AC):**
+
+| Story / AC | Shown by |
+|---|---|
+| US-01, AC-01 | flow 2 (profile first, photo branch), flow 3 |
+| US-02, AC-02, AC-03 | flow 2 (sort, period format) |
+| US-03, AC-04 | flow 2 (section render in Owner order) |
+| US-04, AC-05 | flow 2 |
+| AC-06 | flow 2 (`else` omit empty section) |
+| US-05, AC-07 | flow 1 (edit, build, deploy) + flow 2 (only changed data differs) |
+| US-06, AC-08, AC-08b, AC-09, AC-10 | flow 1 (`alt any problem found`) |
+| US-08, AC-12 | flow 1 (detector hit in the same `alt`) |
+| AC-13 | flow 2 (re-encode drops metadata; postcondition) + flow 3; verified by the `dist/` scan test |
+| US-07, AC-11 | flow 3 (plain text, no script) |
+| AC-14 | flow 3 (`alt` read-only); otherwise non-runtime: enforced by who can change the repository |
+
+**Flags for `design` (none block):** flows 2 and 3 use `service`, `data-store`, `ui` and `external-system` participants from the generic vocabulary; the "data-store" in flow 2 is the in-memory validated data, not a database, and §5 declares no datastore (ADR 0002). No persist step in any flow, so there is no schema or index impact for `data-model`.
+
 ## 7. Deployment view
 
 <!-- N/A: reuses the deployment decided in ADR 0004 (GitHub Pages from GitHub Actions); this feature adds no infra. Wiring the deploy job and gating it on the build is roadmap step 5. -->
