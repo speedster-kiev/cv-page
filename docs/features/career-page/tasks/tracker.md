@@ -8,7 +8,7 @@
 
 | # | Task | Layer | Owner | Estimate | Blocked by | Status | Step |
 |---|---|---|---|---|---|---|---|
-| T1 | Declare yaml and sharp dependencies and ban set:html in lint | infra | mkarazeev@gmail.com | S | — | todo | — |
+| T1 | Declare yaml and sharp dependencies and ban set:html in lint | infra | mkarazeev@gmail.com | S | — | done | COMMIT |
 | T2 | Implement the contact-shape detector with table-driven unit tests | domain | mkarazeev@gmail.com | S | T1 | todo | — |
 | T3 | Define the Zod content schema with required items and period-order rule | domain | mkarazeev@gmail.com | M | T1 | todo | — |
 | T4 | Build the content loader: parse YAML, validate, scan, throw ContentError | infra | mkarazeev@gmail.com | M | T2, T3 | todo | — |

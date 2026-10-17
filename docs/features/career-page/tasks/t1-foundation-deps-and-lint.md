@@ -9,8 +9,8 @@ files_hint: ["package.json", "package-lock.json", "eslint.config.js"]
 owner: "mkarazeev@gmail.com"
 estimate: "S"
 context_budget: "S"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T1 — Declare yaml and sharp dependencies and ban set:html in lint
