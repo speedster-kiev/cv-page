@@ -9,8 +9,8 @@ files_hint: ["tests/build-output.test.ts"]
 owner: "mkarazeev@gmail.com"
 estimate: "M"
 context_budget: "M"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T12 — Add build-output tests: text, order, escaping, weight, read-only

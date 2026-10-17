@@ -238,7 +238,7 @@
         "tests/build-output.test.ts"
       ],
       "file": "docs/features/career-page/tasks/t12-build-output-content-tests.md",
-      "status": "todo"
+      "status": "done"
     },
     {
       "id": "T13",
