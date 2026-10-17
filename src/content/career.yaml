@@ -145,6 +145,11 @@ positions:
     title: Scrum Master / Software Engineer
     start: "2011"
     end: "2013"
+    achievements:
+      - >-
+        Introduced agile practices and Scrum framework to a team of 8 engineers, improving delivery predictability and team collaboration
+      - >-
+        Mentored and coached team members on agile principles, fostering a culture of continuous improvement and self-organization
 
   - employer: Racing Post
     title: Software Engineer, Team Lead, Scrum Master
