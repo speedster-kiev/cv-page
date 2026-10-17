@@ -7,6 +7,36 @@ import { entryLabel, formatPath, validateCareer, type Career, type Path } from '
 const DEFAULT_FILE = 'src/content/career.yaml';
 const CONTACT_HINT = 'contains a contact detail; contact details are shared only through the contact section';
 
+type Position = Career['positions'][number];
+type Education = Career['education'][number];
+
+// What the components receive: Positions ordered, periods ready to print.
+export type PresentedCareer = Omit<Career, 'positions' | 'education'> & {
+  positions: (Position & { period: string })[];
+  education: (Education & { period?: string })[];
+};
+
+export const formatPeriod = (start: string, end?: string): string => `${start} – ${end ?? 'Present'}`;
+
+// Ongoing first, then newest start first; Array.prototype.sort is stable, so ties keep the Owner's order.
+export function sortPositions<T extends { start: string; end?: string }>(positions: readonly T[]): T[] {
+  return [...positions].sort(
+    (a, b) => Number(b.end === undefined) - Number(a.end === undefined) || b.start.localeCompare(a.start),
+  );
+}
+
+// An education entry may give one year, both or none.
+const educationPeriod = ({ start, end }: Education): string | undefined =>
+  start && end ? formatPeriod(start, end) : (start ?? end);
+
+function present(career: Career): PresentedCareer {
+  return {
+    ...career,
+    positions: sortPositions(career.positions).map((p) => ({ ...p, period: formatPeriod(p.start, p.end) })),
+    education: career.education.map((e) => ({ ...e, period: educationPeriod(e) })),
+  };
+}
+
 // One error for the whole Content file: every problem, each naming its entry (spec §6).
 export class ContentError extends Error {
   constructor(readonly problems: string[]) {
@@ -26,7 +56,7 @@ function scanForContactShapes(node: unknown, path: Path, raw: unknown, found: st
   }
 }
 
-export function parseCareer(source: string, label: string): Career {
+export function parseCareer(source: string, label: string): PresentedCareer {
   const prefix = (problem: string) => `${label}: ${problem}`;
 
   const doc = parseDocument(source);
@@ -51,10 +81,10 @@ export function parseCareer(source: string, label: string): Career {
 
   const all = [...problems, ...contact];
   if (all.length > 0 || !data) throw new ContentError(all.map(prefix));
-  return data;
+  return present(data);
 }
 
-export function loadCareer(path: string = process.env.CV_CONTENT_FILE ?? DEFAULT_FILE): Career {
+export function loadCareer(path: string = process.env.CV_CONTENT_FILE ?? DEFAULT_FILE): PresentedCareer {
   const label = basename(path);
   if (!existsSync(path)) throw new ContentError([`${label}: file not found at ${path}`]);
   return parseCareer(readFileSync(path, 'utf8'), label);

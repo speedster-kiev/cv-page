@@ -9,8 +9,8 @@ files_hint: ["src/content/load.ts", "tests/load.test.ts"]
 owner: "mkarazeev@gmail.com"
 estimate: "S"
 context_budget: "S"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T5 — Sort Positions and format periods in the loader

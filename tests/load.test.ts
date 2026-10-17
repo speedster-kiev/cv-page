@@ -2,7 +2,13 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { ContentError, loadCareer, parseCareer } from '../src/content/load';
+import {
+  ContentError,
+  formatPeriod,
+  loadCareer,
+  parseCareer,
+  sortPositions,
+} from '../src/content/load';
 
 // Fake contact shapes only; no real contact detail belongs in the repo.
 const MINIMAL = `
@@ -171,5 +177,93 @@ describe('loadCareer', () => {
     const file = join(dir, 'missing.yaml');
     expect(() => loadCareer(file)).toThrow(ContentError);
     expect(() => loadCareer(file)).toThrow(/missing\.yaml: file not found/);
+  });
+});
+
+describe('formatPeriod', () => {
+  it('shows start and end years', () => {
+    expect(formatPeriod('2018', '2020')).toBe('2018 – 2020');
+  });
+
+  it('shows Present for an ongoing period (AC-03)', () => {
+    expect(formatPeriod('2021')).toBe('2021 – Present');
+  });
+
+  it('shows both years when they are equal', () => {
+    expect(formatPeriod('2018', '2018')).toBe('2018 – 2018');
+  });
+});
+
+describe('sortPositions', () => {
+  const p = (id: string, start: string, end?: string) => ({ id, start, end });
+  const ids = (list: { id: string }[]) => list.map((x) => x.id);
+
+  it('orders newest start first (AC-02)', () => {
+    const sorted = sortPositions([p('a', '2010', '2012'), p('c', '2020', '2022'), p('b', '2015', '2018')]);
+    expect(ids(sorted)).toEqual(['c', 'b', 'a']);
+  });
+
+  it('keeps the Owner order for equal start years (AC-02)', () => {
+    const sorted = sortPositions([p('x', '2015', '2016'), p('y', '2015', '2017'), p('z', '2015', '2018')]);
+    expect(ids(sorted)).toEqual(['x', 'y', 'z']);
+  });
+
+  it('lists an ongoing Position before ended ones, even if it started earlier (AC-03)', () => {
+    const sorted = sortPositions([p('ended', '2022', '2023'), p('now', '2015')]);
+    expect(ids(sorted)).toEqual(['now', 'ended']);
+  });
+
+  it('orders several ongoing Positions newest start first, ties in Owner order (AC-03)', () => {
+    const sorted = sortPositions([p('a', '2015'), p('b', '2020'), p('c', '2015'), p('d', '2018', '2019')]);
+    expect(ids(sorted)).toEqual(['b', 'a', 'c', 'd']);
+  });
+
+  it('does not mutate its input', () => {
+    const input = [p('a', '2010', '2012'), p('b', '2020')];
+    sortPositions(input);
+    expect(ids(input)).toEqual(['a', 'b']);
+  });
+});
+
+describe('parseCareer — presentation order and periods', () => {
+  const doc = `${MINIMAL}
+  - employer: Old Co
+    title: Dev
+    start: "2010"
+    end: "2012"
+    achievements: [Did it]
+  - employer: Now Co
+    title: Lead
+    start: "2018"
+    achievements: [Doing it]
+skills: [Zeta, Alpha]
+education:
+  - institution: Uni B
+    degree: MSc
+    start: "2005"
+    end: "2006"
+  - institution: Uni A
+    degree: Cert
+`;
+
+  it('sorts Positions and adds a display period', () => {
+    const { positions } = parseCareer(doc, 'career.yaml');
+    expect(positions.map((x) => [x.employer, x.period])).toEqual([
+      ['Acme', '2020 – Present'],
+      ['Now Co', '2018 – Present'],
+      ['Old Co', '2010 – 2012'],
+    ]);
+  });
+
+  it('keeps skills and education in the Owner order', () => {
+    const career = parseCareer(doc, 'career.yaml');
+    expect(career.skills).toEqual(['Zeta', 'Alpha']);
+    expect(career.education.map((e) => e.institution)).toEqual(['Uni B', 'Uni A']);
+  });
+
+  it('adds an education period only when one is given', () => {
+    const { education } = parseCareer(doc, 'career.yaml');
+    expect(education[0].period).toBe('2005 – 2006');
+    expect(education[1].period).toBeUndefined();
   });
 });

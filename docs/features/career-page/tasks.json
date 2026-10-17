@@ -95,7 +95,7 @@
         "tests/load.test.ts"
       ],
       "file": "docs/features/career-page/tasks/t5-order-and-period-format.md",
-      "status": "todo"
+      "status": "done"
     },
     {
       "id": "T6",
