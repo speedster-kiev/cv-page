@@ -9,8 +9,8 @@ files_hint: ["src/content/schema.ts", "tests/schema.test.ts"]
 owner: "mkarazeev@gmail.com"
 estimate: "M"
 context_budget: "M"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T3 — Define the Zod content schema with required items and period-order rule
