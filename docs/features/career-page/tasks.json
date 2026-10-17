@@ -1,0 +1,286 @@
+{
+  "slug": "career-page",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Declare yaml and sharp dependencies and ban set:html in lint",
+      "layer": "infra",
+      "deps": [],
+      "acs": [],
+      "dod": "yaml + sharp declared; lint fails on set:html",
+      "files_hint": [
+        "package.json",
+        "package-lock.json",
+        "eslint.config.js"
+      ],
+      "file": "docs/features/career-page/tasks/t1-foundation-deps-and-lint.md",
+      "status": "todo"
+    },
+    {
+      "id": "T2",
+      "title": "Implement the contact-shape detector with table-driven unit tests",
+      "layer": "domain",
+      "deps": [
+        "T1"
+      ],
+      "acs": [
+        "AC-12",
+        "AC-13"
+      ],
+      "dod": "detector unit tests pass (shapes + exemptions)",
+      "files_hint": [
+        "src/lib/contact/detect.ts",
+        "tests/detect.test.ts"
+      ],
+      "file": "docs/features/career-page/tasks/t2-contact-detector.md",
+      "status": "todo"
+    },
+    {
+      "id": "T3",
+      "title": "Define the Zod content schema with required items and period-order rule",
+      "layer": "domain",
+      "deps": [
+        "T1"
+      ],
+      "acs": [
+        "AC-08",
+        "AC-08b",
+        "AC-09"
+      ],
+      "dod": "schema tests pass for AC-08/08b/09 with named paths",
+      "files_hint": [
+        "src/content/schema.ts",
+        "tests/schema.test.ts"
+      ],
+      "file": "docs/features/career-page/tasks/t3-content-schema.md",
+      "status": "todo"
+    },
+    {
+      "id": "T4",
+      "title": "Build the content loader: parse YAML, validate, scan, throw ContentError",
+      "layer": "infra",
+      "deps": [
+        "T2",
+        "T3"
+      ],
+      "acs": [
+        "AC-08",
+        "AC-08b",
+        "AC-09",
+        "AC-10",
+        "AC-12"
+      ],
+      "dod": "loader tests pass; any issue throws one ContentError",
+      "files_hint": [
+        "src/content/load.ts",
+        "tests/load.test.ts"
+      ],
+      "file": "docs/features/career-page/tasks/t4-content-loader.md",
+      "status": "todo"
+    },
+    {
+      "id": "T5",
+      "title": "Sort Positions and format periods in the loader",
+      "layer": "app",
+      "deps": [
+        "T4"
+      ],
+      "acs": [
+        "AC-02",
+        "AC-03"
+      ],
+      "dod": "ordering + period-format tests pass (AC-02/03)",
+      "files_hint": [
+        "src/content/load.ts",
+        "tests/load.test.ts"
+      ],
+      "file": "docs/features/career-page/tasks/t5-order-and-period-format.md",
+      "status": "todo"
+    },
+    {
+      "id": "T6",
+      "title": "Add the Section component and base page styles",
+      "layer": "ui",
+      "deps": [
+        "T1"
+      ],
+      "acs": [
+        "AC-06"
+      ],
+      "dod": "Section renders nothing when empty; base CSS in place",
+      "files_hint": [
+        "src/components/Section.astro",
+        "src/styles/global.css"
+      ],
+      "file": "docs/features/career-page/tasks/t6-section-and-base-styles.md",
+      "status": "todo"
+    },
+    {
+      "id": "T7",
+      "title": "Build the Profile component with the optional processed photo",
+      "layer": "ui",
+      "deps": [
+        "T3",
+        "T6"
+      ],
+      "acs": [
+        "AC-01"
+      ],
+      "dod": "Profile renders photo+text; no-photo variant clean",
+      "files_hint": [
+        "src/components/Profile.astro",
+        "src/styles/global.css"
+      ],
+      "file": "docs/features/career-page/tasks/t7-profile-component.md",
+      "status": "todo"
+    },
+    {
+      "id": "T8",
+      "title": "Build the Positions component with optional parts",
+      "layer": "ui",
+      "deps": [
+        "T3",
+        "T6"
+      ],
+      "acs": [
+        "AC-02",
+        "AC-03"
+      ],
+      "dod": "Positions render with optional parts omitted cleanly",
+      "files_hint": [
+        "src/components/Positions.astro"
+      ],
+      "file": "docs/features/career-page/tasks/t8-positions-component.md",
+      "status": "todo"
+    },
+    {
+      "id": "T9",
+      "title": "Build the Achievements and Skills list components",
+      "layer": "ui",
+      "deps": [
+        "T3",
+        "T6"
+      ],
+      "acs": [
+        "AC-04",
+        "AC-05"
+      ],
+      "dod": "Achievements/Skills lists in Owner order; empty omitted",
+      "files_hint": [
+        "src/components/Achievements.astro",
+        "src/components/Skills.astro"
+      ],
+      "file": "docs/features/career-page/tasks/t9-achievements-and-skills.md",
+      "status": "todo"
+    },
+    {
+      "id": "T10",
+      "title": "Build the Education component with optional period",
+      "layer": "ui",
+      "deps": [
+        "T3",
+        "T6"
+      ],
+      "acs": [
+        "AC-05"
+      ],
+      "dod": "Education renders with/without period; empty omitted",
+      "files_hint": [
+        "src/components/Education.astro"
+      ],
+      "file": "docs/features/career-page/tasks/t10-education-component.md",
+      "status": "todo"
+    },
+    {
+      "id": "T11",
+      "title": "Compose index.astro from the loader and components; remove the placeholder",
+      "layer": "wiring",
+      "deps": [
+        "T5",
+        "T7",
+        "T8",
+        "T9",
+        "T10"
+      ],
+      "acs": [
+        "AC-01",
+        "AC-06",
+        "AC-10"
+      ],
+      "dod": "page composes from loader; invalid content emits no index.html",
+      "files_hint": [
+        "src/pages/index.astro",
+        "src/content/content.json",
+        "astro.config.mjs",
+        "tests/smoke.test.ts"
+      ],
+      "file": "docs/features/career-page/tasks/t11-compose-index-page.md",
+      "status": "todo"
+    },
+    {
+      "id": "T12",
+      "title": "Add build-output tests: text, order, escaping, weight, read-only",
+      "layer": "tests",
+      "deps": [
+        "T11"
+      ],
+      "acs": [
+        "AC-01",
+        "AC-02",
+        "AC-03",
+        "AC-04",
+        "AC-05",
+        "AC-11",
+        "AC-14"
+      ],
+      "dod": "dist text/order/escape/weight/read-only tests pass",
+      "files_hint": [
+        "tests/build-output.test.ts"
+      ],
+      "file": "docs/features/career-page/tasks/t12-build-output-content-tests.md",
+      "status": "todo"
+    },
+    {
+      "id": "T13",
+      "title": "Add dist-wide contact absence and image metadata tests",
+      "layer": "tests",
+      "deps": [
+        "T11",
+        "T2"
+      ],
+      "acs": [
+        "AC-13"
+      ],
+      "dod": "dist scan: no email/phone shapes, no EXIF",
+      "files_hint": [
+        "tests/contact-absence.test.ts"
+      ],
+      "file": "docs/features/career-page/tasks/t13-contact-absence-and-exif-tests.md",
+      "status": "todo"
+    },
+    {
+      "id": "T14",
+      "title": "Add failing-build and content-only-change fixture tests",
+      "layer": "tests",
+      "deps": [
+        "T11"
+      ],
+      "acs": [
+        "AC-06",
+        "AC-07",
+        "AC-08",
+        "AC-08b",
+        "AC-09",
+        "AC-10",
+        "AC-12"
+      ],
+      "dod": "invalid fixtures fail the build with named entries; AC-06/07 hold",
+      "files_hint": [
+        "tests/failing-build.test.ts",
+        "tests/fixtures/"
+      ],
+      "file": "docs/features/career-page/tasks/t14-failing-build-and-fixture-tests.md",
+      "status": "todo"
+    }
+  ]
+}
