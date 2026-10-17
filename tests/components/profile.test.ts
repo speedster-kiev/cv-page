@@ -23,6 +23,14 @@ describe('Profile', () => {
     expect(html.indexOf('<img')).toBeLessThan(html.indexOf('<h1'));
   });
 
+  it('loads the above-the-fold photo eagerly with high priority (LCP)', async () => {
+    const html = await render(Profile, { props: { ...base, photo } });
+    const img = html.match(/<img[^>]*>/)?.[0] ?? '';
+    expect(img).not.toContain('loading="lazy"');
+    expect(img).toContain('loading="eager"');
+    expect(img).toContain('fetchpriority="high"');
+  });
+
   it('renders no image and no wrapper box without a photo', async () => {
     const html = await render(Profile, { props: base });
     expect(html).not.toContain('<img');

@@ -18,6 +18,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>('../content/*.{jpg,j
 });
 
 // The photo is re-encoded by the image pipeline (sharp), which drops source metadata such as EXIF.
+// The loader reports a missing file with the other content problems; this is the backstop.
 const source = photo ? images[`../content/${photo.file}`]?.default : undefined;
 if (photo && !source) throw new Error(`photo.file — ${photo.file} not found in src/content/`);
 
@@ -34,6 +35,8 @@ if (photo && !source) throw new Error(`photo.file — ${photo.file} not found in
         height={160}
         densities={[1, 2]}
         format="webp"
+        loading="eager"
+        fetchpriority="high"
       />
     )
   }
