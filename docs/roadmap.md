@@ -20,7 +20,7 @@ A recruiter or hiring manager opens one public page, reads the owner's Engineeri
 | # | Step | Source | Size | Status |
 |---|---|---|:---:|---|
 | 1 | Project skeleton: Astro/TypeScript project with tests, lint and the Pages workflow | architecture-map.md Module inventory | S | idea |
-| 2 | Career page: owner content renders as sections, validated by a typed schema | idea-brief.md §7 Recommendation | M | idea |
+| 2 | Career page: owner content renders as sections, validated by a typed schema → [`career-page`](features/career-page/) | idea-brief.md §7 Recommendation | S | spec'd |
 | 3 | Contact section: public booking and LinkedIn links, email and phone revealed on click | idea-brief.md §5 Out of scope | M | idea |
 | 4 | Search and AI-agent readability: structured data, sitemap, robots, metadata | idea-brief.md §3 Users | S | idea |
 | 5 | Go live: repository, remote, Pages setup, URL, link from CV and LinkedIn | ADR 0004 | S | idea |
