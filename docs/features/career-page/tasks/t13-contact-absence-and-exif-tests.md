@@ -9,8 +9,8 @@ files_hint: ["tests/contact-absence.test.ts"]
 owner: "mkarazeev@gmail.com"
 estimate: "S"
 context_budget: "S"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T13 — Add dist-wide contact absence and image metadata tests

@@ -256,7 +256,7 @@
         "tests/contact-absence.test.ts"
       ],
       "file": "docs/features/career-page/tasks/t13-contact-absence-and-exif-tests.md",
-      "status": "todo"
+      "status": "done"
     },
     {
       "id": "T14",
