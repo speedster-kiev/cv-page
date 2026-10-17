@@ -151,7 +151,7 @@
         "src/components/Positions.astro"
       ],
       "file": "docs/features/career-page/tasks/t8-positions-component.md",
-      "status": "todo"
+      "status": "done"
     },
     {
       "id": "T9",

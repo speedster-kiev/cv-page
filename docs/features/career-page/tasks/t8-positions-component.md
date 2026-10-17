@@ -9,8 +9,8 @@ files_hint: ["src/components/Positions.astro"]
 owner: "mkarazeev@gmail.com"
 estimate: "S"
 context_budget: "S"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T8 — Build the Positions component with optional parts

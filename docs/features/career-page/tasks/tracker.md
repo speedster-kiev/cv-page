@@ -15,7 +15,7 @@
 | T5 | Sort Positions and format periods in the loader | app | mkarazeev@gmail.com | S | T4 | done | COMMIT |
 | T6 | Add the Section component and base page styles | ui | mkarazeev@gmail.com | S | T1 | done | COMMIT |
 | T7 | Build the Profile component with the optional processed photo | ui | mkarazeev@gmail.com | M | T3, T6 | done | COMMIT |
-| T8 | Build the Positions component with optional parts | ui | mkarazeev@gmail.com | S | T3, T6 | todo | — |
+| T8 | Build the Positions component with optional parts | ui | mkarazeev@gmail.com | S | T3, T6 | done | COMMIT |
 | T9 | Build the Achievements and Skills list components | ui | mkarazeev@gmail.com | S | T3, T6 | todo | — |
 | T10 | Build the Education component with optional period | ui | mkarazeev@gmail.com | S | T3, T6 | todo | — |
 | T11 | Compose index.astro from the loader and components; remove the placeholder | wiring | mkarazeev@gmail.com | M | T5, T7, T8, T9, T10 | todo | — |

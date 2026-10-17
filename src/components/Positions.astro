@@ -1,0 +1,27 @@
+---
+import type { PresentedCareer } from '../content/load';
+import { paragraphs } from '../lib/paragraphs';
+import Section from './Section.astro';
+
+interface Props {
+  positions: PresentedCareer['positions'];
+}
+
+const { positions } = Astro.props;
+---
+
+<Section title="Positions" count={positions.length}>
+  {
+    positions.map((position) => (
+      <article class="position">
+        <h3>{position.title} · {position.employer}</h3>
+        <p class="period">{position.period}</p>
+        {position.employer_about && <p class="employer-about">{position.employer_about}</p>}
+        {paragraphs(position.summary).map((paragraph) => <p>{paragraph}</p>)}
+        <ul>
+          {position.achievements.map((achievement) => <li>{achievement}</li>)}
+        </ul>
+      </article>
+    ))
+  }
+</Section>
