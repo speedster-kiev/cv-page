@@ -9,8 +9,8 @@ files_hint: ["src/components/Profile.astro", "src/styles/global.css"]
 owner: "mkarazeev@gmail.com"
 estimate: "M"
 context_budget: "S"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T7 — Build the Profile component with the optional processed photo

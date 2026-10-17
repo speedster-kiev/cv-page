@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { Career } from '../content/schema';
+
+interface Props {
+  name: Career['name'];
+  headline: Career['headline'];
+  summary?: Career['summary'];
+  photo?: Career['photo'];
+}
+
+const { name, headline, summary, photo } = Astro.props;
+
+const images = import.meta.glob<{ default: ImageMetadata }>('../content/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+});
+
+// The photo is re-encoded by the image pipeline (sharp), which drops source metadata such as EXIF.
+const source = photo ? images[`../content/${photo.file}`]?.default : undefined;
+if (photo && !source) throw new Error(`photo.file — ${photo.file} not found in src/content/`);
+
+const paragraphs = (summary ?? '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+---
+
+<header class="profile">
+  {
+    photo && source && (
+      <Image
+        class="profile-photo"
+        src={source}
+        alt={photo.alt}
+        width={160}
+        height={160}
+        densities={[1, 2]}
+        format="webp"
+      />
+    )
+  }
+  <div class="profile-text">
+    <h1>{name}</h1>
+    <p class="headline">{headline}</p>
+    {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+  </div>
+</header>

@@ -14,7 +14,7 @@
 | T4 | Build the content loader: parse YAML, validate, scan, throw ContentError | infra | mkarazeev@gmail.com | M | T2, T3 | done | COMMIT |
 | T5 | Sort Positions and format periods in the loader | app | mkarazeev@gmail.com | S | T4 | done | COMMIT |
 | T6 | Add the Section component and base page styles | ui | mkarazeev@gmail.com | S | T1 | done | COMMIT |
-| T7 | Build the Profile component with the optional processed photo | ui | mkarazeev@gmail.com | M | T3, T6 | todo | — |
+| T7 | Build the Profile component with the optional processed photo | ui | mkarazeev@gmail.com | M | T3, T6 | done | COMMIT |
 | T8 | Build the Positions component with optional parts | ui | mkarazeev@gmail.com | S | T3, T6 | todo | — |
 | T9 | Build the Achievements and Skills list components | ui | mkarazeev@gmail.com | S | T3, T6 | todo | — |
 | T10 | Build the Education component with optional period | ui | mkarazeev@gmail.com | S | T3, T6 | todo | — |
