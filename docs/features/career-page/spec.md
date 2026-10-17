@@ -218,3 +218,73 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 - [ ] `career.yaml` has a Position (Berlingske Media) with no achievements, which AC-08b now rejects. Default now: Owner adds at least one achievement before first publish. — owner: Owner, due: before implement
 - [ ] How are contact details detected in career text without wrongly rejecting ordinary numbers such as years, team sizes and money amounts? Default now: reject anything shaped like an email address, and anything shaped like a phone number with at least 7 digits in a row (spaces, dashes and brackets allowed), except year ranges such as "2019–2023" and amounts grouped with spaces such as "1 000 000", which must not be rejected. The absence check compares against these shapes, since the Owner's real values belong to roadmap step 3. — owner: Tech Lead, due: before `sdd:design`
 - [ ] How will the Owner measure the brief's outcome "a visitor books a call or contacts the owner", given there is no backend (ADR 0002)? Default now: not measured. — owner: Owner, due: before roadmap step 5 (go live)
+
+## Test plan
+
+The page is built from the Content file into static files; invalid content must stop the build with a named error. There is no datastore (ADR 0002), so the "real dependency" for integration tests is the real build run on throwaway fixture Content files.
+
+### Levels
+
+| Level | Scope here |
+|---|---|
+| unit | Content checks (required items, period order, contact-shape detection), period formatting, Position ordering — pure functions, no I/O. |
+| component | Each Career section rendered in isolation for the states in `screens.md` SCR-01 (default, no-photo, section-omitted, position-ongoing, position-optional-parts, education-period-optional). |
+| integration | The real build run against a fixture Content file in a temporary directory; assertions read the built output files. |
+| e2e-through-UI | One smoke flow: the built page opened as a Visitor sees it, read top to bottom with scripts disabled. |
+| visual-regression | N/A: not chosen for this feature. |
+| contract / load | <!-- N/A: no API or event boundary; no numeric load NFR --> |
+
+### AC coverage
+
+| AC (spec.md §5) | Test name (intent-based) | Level | Expected outcome |
+|---|---|---|---|
+| AC-01 happy path | profile block comes first with name, photo, alt text, headline, summary | component + integration | profile is the first Career section in the built page |
+| AC-01 variant | profile without a photo shows no empty image | component | no image element, rest of profile intact |
+| AC-02 happy path | positions are listed newest start year first with all parts | unit + component + integration | order by start year; employer, title, period, achievements shown; optional description and summary shown when given |
+| AC-02 tie | positions with the same start year keep the Owner's order | unit | given order preserved |
+| AC-03 happy path | ongoing position shows "Present" and sorts first | unit + component | period reads "2021 – Present", listed before ended positions |
+| AC-03 ties | several ongoing positions order newest start first, ties keep given order | unit | ordering as stated |
+| AC-04 happy path | notable achievements appear together in the Owner's order | component + integration | one achievements section, given order |
+| AC-05 happy path | skills list and education entries render in the Owner's order | component + integration | skills flat list; education with institution, degree, optional period |
+| AC-06 invariant | section with no entries is not rendered at all | component + integration | no heading, no placeholder, no gap |
+| AC-07 happy path | changing one title changes only that title in the built page | integration | the built page differs from the baseline build only in that title |
+| AC-08 error | missing name stops the build and names the field | unit + integration | build fails, message says name is required and where it belongs, no output produced |
+| AC-08b error | each missing required item stops the build and names it | unit + integration | one case per item: headline, employer, title, start year, achievements, education institution, education degree, photo alt text; message names the Position when it belongs to one |
+| AC-08b optional | omitting optional items does not fail the build | unit | summary, skills, education, end year, employer description, position summary may all be absent |
+| AC-09 invariant | period ending before it starts is rejected | unit + integration | build fails naming the Position or education entry |
+| AC-09 boundary | period ending in the same year it starts is accepted | unit | accepted |
+| AC-10 cross-context | failed content check leaves no new output | integration | build fails and no built page exists from that run |
+| AC-11 happy path | every Content-file text is present in the built text in the same order | integration + e2e-through-UI | all values present as written (dates after display formatting), same order, with scripts disabled |
+| AC-12 error | email-shaped text in any career field stops the build and names the entry | unit + integration | one case per field kind (name, headline, summary, alt text, achievement, position text incl. description and summary, skill, education); message names the entry and says contact details go through the contact section |
+| AC-12 error | phone-shaped text of 7 or more digits stops the build and names the entry | unit + integration | rejected, entry named |
+| AC-13 invariant | no raw email or phone appears in any built file | integration | scan of every file in the built output (text, links, attributes, metadata, other files) finds no email or phone shape |
+| AC-14 authorization | built page offers no way to change content | integration | built output has no form, no input and no script that sends data; content changes only via the Content file |
+
+### Edge cases / error paths
+
+- Year range such as "2019–2023" in text → expected: not treated as a phone number, build passes.
+- Amount grouped with spaces such as "1 000 000" → expected: not treated as a phone number, build passes.
+- Number with fewer than 7 digits in a row (team size, year) → expected: accepted.
+- Phone with spaces, dashes or brackets and 7 or more digits → expected: rejected, entry named.
+- Unknown key in the Content file → expected: build fails naming the key.
+- Content file missing or not parseable → expected: build fails with a clear message, no output.
+- Markup or script text inside a value → expected: appears as literal text in the built page, never as a tag.
+- Several validation failures at once → expected: all are listed, each naming its entry (failure message quality NFR).
+- Position with no achievements (current `career.yaml`, Berlingske Media; see §8) → expected: build fails until the Owner adds one.
+
+### Test data
+
+- Seed strategy: small fixture Content files written per test (a minimal valid one plus one-defect variants); the real `src/content/career.yaml` gets one smoke build.
+- Integration dependency: the real build run in a throwaway temporary directory; no mocked parser or renderer, no datastore exists.
+- Cleanup boundary: per-test temporary directory removed after each test, so runs are independent.
+
+### NFR validation (load)
+
+<!-- N/A: no numeric NFR to load-test. -->
+
+Numeric NFRs are covered as gates, not load scenarios: delivered HTML + CSS weight ≤ 100 KB and 100% text presence (build-output tests, integration); content check plus build ≤ 60 s (CI job duration); audit scores, contrast, 320 px width and browser support are manual or inherited by roadmap step 5.
+
+### CI placement
+
+- On every PR: unit, component, and the integration build-output tests.
+- Pre-release / go-live (roadmap step 5): e2e-through-UI smoke flow and the inherited manual gates.
