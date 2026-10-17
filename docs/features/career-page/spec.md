@@ -32,7 +32,8 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 
 - The contact section (booking link, professional-network link, click-to-reveal email and phone) — it is roadmap step 3, which owns the click-to-reveal mechanism and its encoding; this step only guarantees that Career content never contains raw email or phone (AC-12, AC-13).
 - Search and AI-agent metadata (structured data, sitemap, robots rules, page metadata) — roadmap step 4, which derives it from the content once the content exists.
-- Putting the page on the public internet and linking it from the Owner's CV and profile — roadmap step 5.
+- Putting the page on the public internet and linking it from the Owner's CV and profile — roadmap step 5. In this step "publishing stops" means the build fails and produces no output when content is invalid (AC-08 to AC-10, AC-12); connecting that check to the deploy is step 5.
+- Formatted text or links inside Career content — content is plain text only.
 - A photo, several languages, theme switching or animation — none was requested by the Owner; a photo is recorded as an open question in §8.
 
 ## 4. User stories
@@ -52,7 +53,7 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 ### US-03: Scan key achievements
 
 **As a** Visitor
-**I want** a short list of the Owner's most notable achievements in one place
+**I want** a list of the Owner's most notable achievements in one place (no fixed maximum; the Owner decides how many)
 **So that** I get the highlights without reading every Position
 
 ### US-04: See skills and education
@@ -97,13 +98,13 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 
 **Given** the Content file lists three Positions with different periods
 **When** a Visitor opens the page
-**Then** the Visitor sees the Positions newest first, each with its employer, title, period and achievements
+**Then** the Visitor sees the Positions newest first by start month, each with its employer, title, period and achievements; Positions with the same start month keep the order the Owner gave
 
 ### AC-03 (US-02) — happy path, current Position
 
 **Given** a Position in the Content file has a start but no end
 **When** a Visitor opens the page
-**Then** the Visitor sees that Position's period shown as ongoing, and it appears first among the Positions
+**Then** the Visitor sees that Position's period shown as ongoing (for example "Mar 2021 – Present"), and it appears first among the Positions; if several Positions are ongoing they keep the order the Owner gave, newest start first
 
 ### AC-04 (US-03) — happy path
 
@@ -115,7 +116,7 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 
 **Given** the Content file lists skills and education entries
 **When** a Visitor opens the page
-**Then** the Visitor sees a skills section and an education section with those entries
+**Then** the Visitor sees a skills section (a flat list in the order the Owner gave) and an education section (each entry with institution, degree and, when given, a period, in the order the Owner gave)
 
 ### AC-06 (US-04) — domain invariant, no empty sections
 
@@ -127,7 +128,7 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 
 **Given** the Owner changes one Position's title in the Content file and nothing else
 **When** the Owner publishes
-**Then** Visitors see the new title and every other part of the page is unchanged
+**Then** Visitors see the new title and all other visible content of the page is unchanged
 
 ### AC-08 (US-06) — error, required item missing
 
@@ -135,9 +136,15 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 **When** the Owner tries to publish
 **Then** publishing stops and the Owner is told that the name is required and where in the Content file it belongs
 
+### AC-08b (US-06) — error, other required items missing
+
+**Given** the Content file has no headline, or a Position without an employer, a title or a start month; the summary, achievements, skills and education are optional
+**When** the Owner tries to publish
+**Then** publishing stops and the Owner is told which item is missing, naming the Position when the item belongs to one
+
 ### AC-09 (US-06) — domain invariant, period order
 
-**Given** a Position in the Content file ends before it starts
+**Given** a Position in the Content file ends in an earlier month than it starts (ending in the same month it starts is allowed)
 **When** the Owner tries to publish
 **Then** publishing stops and the Owner is told that a Position cannot end before it starts, naming the Position
 
@@ -151,18 +158,18 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 
 **Given** the page is published
 **When** a Machine reader reads it without running scripts
-**Then** every item of Career content from the Content file is present as readable text, in the same order a Visitor sees it
+**Then** every item of Career content from the Content file is present as readable text, in the same order a Visitor sees it; dates may be shown in the display format a Visitor sees (such as "Mar 2021 – Present"), all other text is present as written
 
 ### AC-12 (US-08) — error, contact detail in career text
 
-**Given** the Owner's summary or a Position's text contains an email address or a phone number
+**Given** any Career content text — name, headline, summary, achievements, a Position's text, skills or education — contains something shaped like an email address or a phone number (any such value, not only the Owner's own)
 **When** the Owner tries to publish
 **Then** publishing stops and the Owner is told which entry contains the contact detail and that contact details are shared only through the contact section
 
 ### AC-13 (US-08) — domain invariant, raw contact details never shown
 
 **Given** the page is published
-**When** any Visitor or Machine reader reads the page text
+**When** any Visitor or Machine reader reads the page in any form — visible text, links, attributes, metadata or any other delivered file
 **Then** no raw email address and no raw phone number of the Owner appear anywhere in it
 
 ### AC-14 (US-05) — authorization, only the Owner changes content
@@ -178,8 +185,8 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 | Load speed, mobile | Largest Contentful Paint ≤ 2.5 s on a simulated mid-range phone over a 4G connection, empty cache | Lighthouse mobile run on the built page (gate inherited by roadmap step 5, go live) |
 | Lighthouse performance score, mobile | ≥ 90 | same Lighthouse run |
 | Accessibility | Lighthouse accessibility score ≥ 95 and text contrast ratio ≥ 4.5:1 | same Lighthouse run |
-| Delivered page weight | ≤ 100 KB for text and styles combined (no images in this step) | build-output test that sums the built files |
-| Works without scripts | 100% of Content-file text present in the delivered page text | build-output test that compares the Content file against the built page |
+| Delivered page weight | ≤ 100 KB uncompressed for HTML and CSS combined (no images, fonts or scripts in this step; the contact reveal script is step 3's budget) | build-output test that sums the built HTML and CSS files |
+| Works without scripts | 100% of Content-file text present in the delivered page text, comparing values after display formatting (dates only) | build-output test that compares the Content file against the built page |
 | Small screens | no horizontal scrolling at a 320 px viewport width | manual check (gate inherited by roadmap step 5, go live) |
 | Failure message quality | 100% of validation failures name the offending entry and what is wrong | automated tests of the content checks |
 | Content check plus build time | ≤ 60 s | duration of the build job in CI |
@@ -192,7 +199,7 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 - **AuthZ/AuthN impact:** none — the page is public and read-only for everyone; the only way to change it is the Owner's own editing of the Content file in the repository.
 - **Abuse cases:**
   - Contact details typed into career text by mistake: publishing stops and names the entry (AC-12).
-  - Markup or script text inside Career content: shown to Visitors as plain text, never executed.
+  - Markup or script text inside Career content: Career content is plain text only (no formatting or links); markup is shown to Visitors as plain text, never executed.
   - Scraping of the page: accepted, since the Career content is public by design; the raw email and phone are the only protected items (AC-13).
   - Someone else changing the content: out of scope here — controlled by who can change the repository.
 - **Security review:** N/A — a public, read-only page with no accounts and no Visitor data; its one sensitive rule (no raw email or phone) is covered by AC-12 and AC-13 and verified by automated tests.
@@ -206,7 +213,7 @@ Traceability and limits: the Owner has not yet supplied the Content file (idea b
 
 ## 8. Open questions
 
-- [ ] What are the Content file's format, language and amount, and which Career sections does the Owner want beyond the assumed set (profile, positions, achievements, skills, education)? Default now: English, one Content file, the five assumed sections. — owner: Owner, due: before `sdd:design`
+- [ ] What are the Content file's format, language and amount, and which Career sections does the Owner want beyond the assumed set (profile, positions, achievements, skills, education)? Default now: English, one Content file, the five assumed sections, plain text only, dates to the month, required items as in AC-08/AC-08b (clarify assumptions, to be confirmed). — owner: Owner, due: before `sdd:design`
 - [ ] Does the Owner want a photo on the page? Default now: no photo. — owner: Owner, due: before `sdd:design`
-- [ ] How are contact details detected in career text without wrongly rejecting ordinary numbers such as years, team sizes and money amounts? Default now: reject anything shaped like an email address, and anything shaped like a phone number with at least 7 digits in a row (spaces, dashes and brackets allowed). — owner: Tech Lead, due: before `sdd:design`
+- [ ] How are contact details detected in career text without wrongly rejecting ordinary numbers such as years, team sizes and money amounts? Default now: reject anything shaped like an email address, and anything shaped like a phone number with at least 7 digits in a row (spaces, dashes and brackets allowed), except year ranges such as "2019–2023" and amounts grouped with spaces such as "1 000 000", which must not be rejected. The absence check compares against these shapes, since the Owner's real values belong to roadmap step 3. — owner: Tech Lead, due: before `sdd:design`
 - [ ] How will the Owner measure the brief's outcome "a visitor books a call or contacts the owner", given there is no backend (ADR 0002)? Default now: not measured. — owner: Owner, due: before roadmap step 5 (go live)
