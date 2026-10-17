@@ -9,8 +9,8 @@ files_hint: ["tests/failing-build.test.ts", "tests/fixtures/"]
 owner: "mkarazeev@gmail.com"
 estimate: "M"
 context_budget: "M"
-status: "todo"
-step: ""
+status: "done"
+step: "COMMIT"
 ---
 
 # T14 — Add failing-build and content-only-change fixture tests

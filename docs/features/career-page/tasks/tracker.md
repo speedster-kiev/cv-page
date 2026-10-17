@@ -21,6 +21,6 @@
 | T11 | Compose index.astro from the loader and components; remove the placeholder | wiring | mkarazeev@gmail.com | M | T5, T7, T8, T9, T10 | done | COMMIT |
 | T12 | Add build-output tests: text, order, escaping, weight, read-only | tests | mkarazeev@gmail.com | M | T11 | done | COMMIT |
 | T13 | Add dist-wide contact absence and image metadata tests | tests | mkarazeev@gmail.com | S | T11, T2 | done | COMMIT |
-| T14 | Add failing-build and content-only-change fixture tests | tests | mkarazeev@gmail.com | M | T11 | todo | — |
+| T14 | Add failing-build and content-only-change fixture tests | tests | mkarazeev@gmail.com | M | T11 | done | COMMIT |
 
 **Total:** 14 tasks, ~10 person-days.

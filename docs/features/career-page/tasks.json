@@ -280,7 +280,7 @@
         "tests/fixtures/"
       ],
       "file": "docs/features/career-page/tasks/t14-failing-build-and-fixture-tests.md",
-      "status": "todo"
+      "status": "done"
     }
   ]
 }
