@@ -1,10 +1,12 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { basename } from 'node:path';
+import { basename, join } from 'node:path';
 import { parseDocument } from 'yaml';
 import { hasContactShape } from '../lib/contact/detect';
 import { entryLabel, formatPath, validateCareer, type Career, type Path } from './schema';
 
 const DEFAULT_FILE = 'src/content/career.yaml';
+// The photo is resolved against this folder by the Profile component.
+const PHOTO_DIR = 'src/content';
 const CONTACT_HINT = 'contains a contact detail; contact details are shared only through the contact section';
 
 type Position = Career['positions'][number];
@@ -56,7 +58,9 @@ function scanForContactShapes(node: unknown, path: Path, raw: unknown, found: st
   }
 }
 
-export function parseCareer(source: string, label: string): PresentedCareer {
+export type ParseOptions = { photoExists?: (file: string) => boolean };
+
+export function parseCareer(source: string, label: string, { photoExists }: ParseOptions = {}): PresentedCareer {
   const prefix = (problem: string) => `${label}: ${problem}`;
 
   const doc = parseDocument(source);
@@ -79,7 +83,14 @@ export function parseCareer(source: string, label: string): PresentedCareer {
   const contact: string[] = [];
   scanForContactShapes(raw, [], raw, contact);
 
-  const all = [...problems, ...contact];
+  // Read from the raw document so the file is reported alongside schema problems, not only after they are fixed.
+  const photoFile = (raw as { photo?: { file?: unknown } }).photo?.file;
+  const missingPhoto =
+    typeof photoFile === 'string' && photoExists && !photoExists(photoFile)
+      ? [`photo.file — ${photoFile} not found in ${PHOTO_DIR}/`]
+      : [];
+
+  const all = [...problems, ...contact, ...missingPhoto];
   if (all.length > 0 || !data) throw new ContentError(all.map(prefix));
   return present(data);
 }
@@ -87,5 +98,7 @@ export function parseCareer(source: string, label: string): PresentedCareer {
 export function loadCareer(path: string = process.env.CV_CONTENT_FILE ?? DEFAULT_FILE): PresentedCareer {
   const label = basename(path);
   if (!existsSync(path)) throw new ContentError([`${label}: file not found at ${path}`]);
-  return parseCareer(readFileSync(path, 'utf8'), label);
+  return parseCareer(readFileSync(path, 'utf8'), label, {
+    photoExists: (file) => existsSync(join(PHOTO_DIR, file)),
+  });
 }

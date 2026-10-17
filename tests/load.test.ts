@@ -45,6 +45,29 @@ describe('parseCareer — valid content', () => {
   });
 });
 
+describe('parseCareer — photo file (AC-08b, spec §6 failure messages)', () => {
+  const withPhoto = MINIMAL.replace('headline: Engineering Manager\n', 'headline: Engineering Manager\nphoto:\n  file: nope.jpg\n  alt: Portrait\n');
+
+  it('lists a missing photo file with the other problems in one error', () => {
+    const yamlText = withPhoto.replace('name: Jane Doe\n', '');
+    let error: ContentError | undefined;
+    try {
+      parseCareer(yamlText, 'career.yaml', { photoExists: () => false });
+    } catch (e) {
+      error = e as ContentError;
+    }
+    expect(error).toBeInstanceOf(ContentError);
+    expect(error!.problems).toEqual([
+      'career.yaml: name — required',
+      'career.yaml: photo.file — nope.jpg not found in src/content/',
+    ]);
+  });
+
+  it('accepts a photo file that exists', () => {
+    expect(parseCareer(withPhoto, 'career.yaml', { photoExists: () => true }).photo?.file).toBe('nope.jpg');
+  });
+});
+
 describe('parseCareer — schema problems (AC-08, AC-08b, AC-09)', () => {
   it('lists a missing name as "career.yaml: name — required"', () => {
     const error = failure(MINIMAL.replace('name: Jane Doe\n', ''));
