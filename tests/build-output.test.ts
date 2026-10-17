@@ -147,3 +147,24 @@ describe('built page budget and mode', () => {
     expect(html).not.toMatch(/<(form|input|textarea|select|button|script)\b/i);
   });
 });
+
+describe('built page under the GitHub Pages path (ADR 0004)', () => {
+  // The site is served from https://speedster-kiev.github.io/cv-page/, so a root-absolute URL
+  // such as /_astro/photo.webp points outside the site and 404s (AC-01: the Visitor sees the photo).
+  const BASE = '/cv-page/';
+
+  const rootAbsolute = [...html.matchAll(/\s(?:src|href)="(\/[^"]*)"/g)].map((m) => m[1]);
+  const srcsetUrls = [...html.matchAll(/\ssrcset="([^"]*)"/g)].flatMap((m) =>
+    m[1].split(',').map((candidate) => candidate.trim().split(/\s+/)[0]),
+  );
+
+  it('points the photo at the base path', () => {
+    const photo = html.match(/<img[^>]*class="profile-photo"[^>]*>/)?.[0] ?? '';
+    expect(photo).toMatch(new RegExp(`\\ssrc="${BASE}_astro/`));
+    expect(srcsetUrls.length).toBeGreaterThan(0);
+  });
+
+  it('serves every root-absolute asset URL from the base path', () => {
+    for (const url of [...rootAbsolute, ...srcsetUrls]) expect(url.startsWith(BASE)).toBe(true);
+  });
+});
